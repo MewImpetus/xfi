@@ -1,6 +1,6 @@
 # TACT Compilation Report
-Contract: Tweetfi
-BOC Size: 2688 bytes
+Contract: JettonDefaultWallet
+BOC Size: 2692 bytes
 
 # Types
 Total Types: 25
@@ -106,14 +106,11 @@ TLB: `_ merkle_root:^string set_at:uint32 set_interval:uint32 admin:address max_
 Signature: `ClaimInfo{merkle_root:^string,set_at:uint32,set_interval:uint32,admin:address,max_mint_today:uint64,minted_today:uint64}`
 
 # Get Methods
-Total Get Methods: 3
+Total Get Methods: 2
 
-## get_jetton_data
+## get_wallet_data
 
-## get_wallet_address
-Argument: owner
-
-## owner
+## get_unavailable_balance
 
 # Error Codes
 2: Stack undeflow

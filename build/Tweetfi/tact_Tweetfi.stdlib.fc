@@ -11,8 +11,52 @@ slice __tact_verify_address(slice address) inline {
     return address;
 }
 
+(slice, slice) __tact_load_address(slice cs) inline {
+    slice raw = cs~load_msg_addr();
+    return (cs, __tact_verify_address(raw));
+}
+
+(slice, slice) __tact_load_address_opt(slice cs) inline {
+    slice raw = cs~load_msg_addr();
+    if (raw.preload_uint(2) != 0) {
+        return (cs, __tact_verify_address(raw));
+    } else {
+        return (cs, null());
+    }
+}
+
 builder __tact_store_address(builder b, slice address) inline {
     return b.store_slice(__tact_verify_address(address));
+}
+
+builder __tact_store_address_opt(builder b, slice address) inline {
+    if (null?(address)) {
+        b = b.store_uint(0, 2);
+        return b;
+    } else {
+        return __tact_store_address(b, address);
+    }
+}
+
+slice __tact_create_address(int chain, int hash) inline {
+    var b = begin_cell();
+    b = b.store_uint(2, 2);
+    b = b.store_uint(0, 1);
+    b = b.store_int(chain, 8);
+    b = b.store_uint(hash, 256);
+    var addr = b.end_cell().begin_parse();
+    return __tact_verify_address(addr);
+}
+
+slice __tact_compute_contract_address(int chain, cell code, cell data) inline {
+    var b = begin_cell();
+    b = b.store_uint(0, 2);
+    b = b.store_uint(3, 2);
+    b = b.store_uint(0, 1);
+    b = b.store_ref(code);
+    b = b.store_ref(data);
+    var hash = cell_hash(b.end_cell());
+    return __tact_create_address(chain, hash);
 }
 
 int __tact_my_balance() inline {
@@ -35,7 +79,126 @@ builder __tact_store_bool(builder b, int v) inline {
     return b.store_int(v, 1);
 }
 
+int __tact_slice_eq_bits(slice a, slice b) inline {
+    return equal_slice_bits(a, b);
+}
+
+cell __tact_dict_set_code(cell dict, int id, cell code) inline {
+    return udict_set_ref(dict, 16, id, code);
+}
+
+cell __tact_dict_get_code(cell dict, int id) inline {
+    var (data, ok) = udict_get_ref?(dict, 16, id);
+    throw_unless(135, ok);
+    return data;
+}
+
 forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
+
+tuple __tact_string_builder_start(builder b) inline {
+    return tpush(tpush(empty_tuple(), b), null());
+}
+
+tuple __tact_string_builder_start_string() inline {
+    return __tact_string_builder_start(begin_cell());
+}
+
+cell __tact_string_builder_end(tuple builders) inline {
+    (builder b, tuple tail) = uncons(builders);
+    cell c = b.end_cell();
+    while(~ null?(tail)) {
+        (b, tail) = uncons(tail);
+        c = b.store_ref(c).end_cell();
+    }
+    return c;
+}
+
+slice __tact_string_builder_end_slice(tuple builders) inline {
+    return __tact_string_builder_end(builders).begin_parse();
+}
+
+((tuple), ()) __tact_string_builder_append(tuple builders, slice sc) inline_ref {
+    int sliceRefs = slice_refs(sc);
+    int sliceBits = slice_bits(sc);
+    
+    while((sliceBits > 0) | (sliceRefs > 0)) {
+    
+        ;; Load the current builder
+        (builder b, tuple tail) = uncons(builders);
+        int remBytes = 127 - (builder_bits(b) / 8);
+        int exBytes = sliceBits / 8;
+    
+        ;; Append bits
+        int amount = min(remBytes, exBytes);
+        if (amount > 0) {
+            slice read = sc~load_bits(amount * 8);
+            b = b.store_slice(read);
+        }
+    
+        ;; Update builders
+        builders = cons(b, tail);
+    
+        ;; Check if we need to add a new cell and continue
+        if (exBytes - amount > 0) {
+            var bb = begin_cell();
+            builders = cons(bb, builders);
+            sliceBits = (exBytes - amount) * 8;
+        } elseif (sliceRefs > 0) {
+            sc = sc~load_ref().begin_parse();
+            sliceRefs = slice_refs(sc);
+            sliceBits = slice_bits(sc);
+        } else {
+            sliceBits = 0;
+            sliceRefs = 0;
+        }
+    }
+    
+    return ((builders), ());
+}
+
+slice __tact_int_to_string(int src) inline_ref {
+    var b = begin_cell();
+    if (src < 0) {
+        b = b.store_uint(45, 8);
+        src = - src;
+    }
+    
+    if (src < 1000000000000000000000000000000) {
+        int len = 0;
+        int value = 0;
+        int mult = 1;
+        do {
+            (src, int res) = src.divmod(10);
+            value = value + (res + 48) * mult;
+            mult = mult * 256;
+            len = len + 1;
+        } until (src == 0);
+    
+        b = b.store_uint(value, len * 8);
+    } else {
+        tuple t = empty_tuple();
+        int len = 0;
+        do {
+            int digit = src % 10;
+            t~tpush(digit);
+            len = len + 1;
+            src = src / 10;
+        } until (src == 0);
+    
+        int c = len - 1;
+        repeat(len) {
+            int v = t.at(c);
+            b = b.store_uint(v + 48, 8);
+            c = c - 1;
+        }
+    }
+    return b.end_cell().begin_parse();
+}
+
+slice $global_contractAddress((cell, cell) $s) impure inline {
+    var (($s'code, $s'data)) = $s;
+    return __tact_compute_contract_address(0, $s'code, $s'data);
+}
 
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref {
     var (($params'bounce, $params'to, $params'value, $params'mode, $params'body, $params'code, $params'data)) = $params;
@@ -80,8 +243,13 @@ forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
     send_raw_message($c, $params'mode);
 }
 
-(tuple, ()) $Tweetfi$_fun_forward(tuple $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
+slice $Cell$_fun_asSlice(cell $self) impure inline {
     var ($self) = $self;
+    return begin_parse($self);
+}
+
+((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_forward((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
+    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -97,15 +265,15 @@ forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
         if (($balanceBeforeMessage < 0)) {
             raw_reserve(0, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return ($self, ());
+            return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return ($self, ());
+    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
 }
 
-(tuple, ()) $Tweetfi$_fun_notify(tuple $self, cell $body) impure inline {
-    var ($self) = $self;
-    $self~$Tweetfi$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return ($self, ());
+((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_notify((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, cell $body) impure inline {
+    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
+    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
 }
