@@ -11,16 +11,17 @@
 
 ### Build
 
-`npx blueprint build` or `yarn blueprint build`
+`npm run build`
 
-### Test
-
-`npx blueprint test` or `yarn blueprint test`
 
 ### Deploy or run another script
 
-`npx blueprint run` or `yarn blueprint run`
+`npm run start`
 
 ### Add a new contract
 
 `npx blueprint create ContractName` or `yarn blueprint create ContractName`
+
+
+## TestNet Contract
+Jetton:
