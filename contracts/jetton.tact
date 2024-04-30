@@ -172,7 +172,7 @@ contract JettonDefaultWallet
                 bounce: false,
                 body: TokenTransferInternal{ // 0x178d4519
                     query_id: msg.query_id,
-                    amount: (msg.amount - burn_amount),
+                    amount: msg.amount - burn_amount,
                     from: self.owner,
                     response_destination: msg.response_destination,
                     forward_ton_amount: msg.forward_ton_amount,

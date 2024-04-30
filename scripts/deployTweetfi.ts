@@ -9,7 +9,7 @@ export async function run(provider: NetworkProvider) {
     console.log('Deploying contract with deployer address', deployer.address);
 
     const jettonParams = {
-        name: "Tweetfi0.3",
+        name: "Tweetfi",
         description: "TweetFi (TEF) is an innovative social media mining platform that aims to provide social media users with a share to earn channel by combining AI technology and blockchain token economics.",
         symbol: "TEF",
         image: "https://raw.githubusercontent.com/MewImpetus/xfi/main/logo.png",
@@ -23,10 +23,10 @@ export async function run(provider: NetworkProvider) {
         max_supply,
         {
             $$type: "ClaimInfo",
-            merkle_root: "46469001986676634095880842404468938099931063840840827130771048724708574502014",
+            merkle_root: "81358221309625082040606256653695893517429502780182147497941063822898109247493",
             set_at: BigInt(0),
             set_interval: BigInt(24),
-            admin: Address.parse("UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs"),
+            admin: Address.parse("UQAVWJbfEIGvKOht-utclCtzpnitbaWm70HwRa24NoTpUJ9C"),
             max_mint_today: toNano(10000000),
             minted_today: BigInt(0),
         }));

@@ -65,7 +65,7 @@ contract Tweetfi with Jetton, Deployable {
         self.mint(msg.receiver, msg.amount, self.owner, 666); // (to, amount, response_destination) 
     }
 
-    receive("Mint: 100") { // Public Minting
+    receive("Mint: 100") { // Public Minting, Just for test TODO remove
         require(self.mintable, "Not mintable");
         require(self.total_supply + 100 <= self.max_supply, "Max supply exceeded");
         self.mint(sender(), 100, self.owner, 0); // 🔴 
@@ -94,6 +94,10 @@ contract Tweetfi with Jetton, Deployable {
         self.requireOwner();
         self.claim_info.set_interval = settings.set_interval;
         self.claim_info.max_mint_today = settings.max_mint_today;
+    }
+
+    get fun max_supply() : Int {
+        return self.max_supply;
     }
 
 

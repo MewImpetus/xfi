@@ -54,6 +54,7 @@ PROGRAM{
   DECLPROC $Cell$_fun_asSlice
   DECLPROC $JettonDefaultWallet$_init_child
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+  DECLPROC $Tweetfi$_fun_max_supply
   DECLPROC $Tweetfi$_fun_forward
   DECLPROC $Tweetfi$_fun_notify
   DECLPROC $SendParameters$_constructor_to_value_bounce_mode_body_code_data
@@ -81,6 +82,7 @@ PROGRAM{
   DECLPROC $Tweetfi$_internal_binary_TokenBurnNotification
   DECLPROC $Tweetfi$_internal_binary_ProvideWalletAddress
   DECLPROC $Tweetfi$_internal_binary_Deploy
+  102571 DECLMETHOD %max_supply
   106029 DECLMETHOD %get_jetton_data
   103289 DECLMETHOD %get_wallet_address
   83229 DECLMETHOD %owner
@@ -818,6 +820,9 @@ PROGRAM{
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
+  $Tweetfi$_fun_max_supply PROCREF:<{
+    DUP
+  }>
   $Tweetfi$_fun_forward PROCREF:<{
     PUSHNULL
     PUSHNULL
@@ -1191,6 +1196,11 @@ PROGRAM{
     $DeployOk$_store_cell INLINECALLDICT
     $Tweetfi$_fun_notify INLINECALLDICT
   }>
+  %max_supply PROC:<{
+    $Tweetfi$_contract_load INLINECALLDICT
+    $Tweetfi$_fun_max_supply INLINECALLDICT
+    11 1 BLKDROP2
+  }>
   %get_jetton_data PROC:<{
     $Tweetfi$_contract_load INLINECALLDICT
     $Tweetfi$_fun_get_jetton_data INLINECALLDICT
@@ -1218,7 +1228,7 @@ PROGRAM{
     86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d59764c555439416666344a466753647365626a75596b3178634d4c39455079484b4e534d67464443397a624c} PUSHSLICE
+    x{697066733a2f2f516d6145485333576455573946757548324b724b7231366568764870386a51545335513255673370463273543170} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH

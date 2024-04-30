@@ -1,6 +1,6 @@
 # TACT Compilation Report
 Contract: Tweetfi
-BOC Size: 2688 bytes
+BOC Size: 2707 bytes
 
 # Types
 Total Types: 25
@@ -106,7 +106,9 @@ TLB: `_ merkle_root:^string set_at:uint32 set_interval:uint32 admin:address max_
 Signature: `ClaimInfo{merkle_root:^string,set_at:uint32,set_interval:uint32,admin:address,max_mint_today:uint64,minted_today:uint64}`
 
 # Get Methods
-Total Get Methods: 3
+Total Get Methods: 4
+
+## max_supply
 
 ## get_jetton_data
 

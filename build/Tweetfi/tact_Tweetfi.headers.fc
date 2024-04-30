@@ -168,6 +168,9 @@ slice $Cell$_fun_asSlice(cell $self) impure inline;
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
+;; $Tweetfi$_fun_max_supply
+((int, slice, cell, int, (slice, int, int, slice, int, int), int), int) $Tweetfi$_fun_max_supply((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref;
+
 ;; $Tweetfi$_fun_forward
 ((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_forward((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
 

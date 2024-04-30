@@ -22,6 +22,11 @@
     return ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply);
 }
 
+((int, slice, cell, int, (slice, int, int, slice, int, int), int), int) $Tweetfi$_fun_max_supply((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref {
+    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
+    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $self'max_supply);
+}
+
 ((int, slice, cell, int, (slice, int, int, slice, int, int), int), (cell, cell)) $Tweetfi$_fun_getJettonWalletInit((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $address) impure inline_ref {
     var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
     return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $JettonDefaultWallet$_init_child(__tact_context_sys, $address, my_address()));
@@ -174,6 +179,12 @@
 ;; Get methods of a Contract Tweetfi
 ;;
 
+_ %max_supply() method_id(102571) {
+    var self = $Tweetfi$_contract_load();
+    var res = self~$Tweetfi$_fun_max_supply();
+    return res;
+}
+
 _ %get_jetton_data() method_id(106029) {
     var self = $Tweetfi$_contract_load();
     var res = self~$Tweetfi$_fun_get_jetton_data();
@@ -205,7 +216,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmYvLUT9Aff4JFgSdsebjuYk1xcML9EPyHKNSMgFDC9zbL";
+    return "ipfs://QmaEHS3WdUW9FuuH2KrKr16ehvHp8jQTS5Q2Ug3pF2sT1p";
 }
 
 _ lazy_deployment_completed() method_id {
