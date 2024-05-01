@@ -23,7 +23,7 @@ export async function run(provider: NetworkProvider) {
         max_supply,
         {
             $$type: "ClaimInfo",
-            merkle_root: "81358221309625082040606256653695893517429502780182147497941063822898109247493",
+            merkle_root: "46469001986676634095880842404468938099931063840840827130771048724708574502014",
             set_at: BigInt(0),
             set_interval: BigInt(24),
             admin: Address.parse("UQAVWJbfEIGvKOht-utclCtzpnitbaWm70HwRa24NoTpUJ9C"),

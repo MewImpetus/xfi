@@ -24,4 +24,6 @@
 
 
 ## TestNet Contract
-Jetton:
+Jetton Master: [EQC1w4R9Bz3SLn7Jdnt8xKIbQxxGePQs63WnlM0v-mowGMMI](https://testnet.tonviewer.com/kQC1w4R9Bz3SLn7Jdnt8xKIbQxxGePQs63WnlM0v-mowGHiC)
+
+Meta data:
