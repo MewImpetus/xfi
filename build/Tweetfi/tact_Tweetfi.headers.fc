@@ -9,14 +9,8 @@ slice __tact_verify_address(slice address) inline;
 ;; __tact_load_address
 (slice, slice) __tact_load_address(slice cs) inline;
 
-;; __tact_load_address_opt
-(slice, slice) __tact_load_address_opt(slice cs) inline;
-
 ;; __tact_store_address
 builder __tact_store_address(builder b, slice address) inline;
-
-;; __tact_store_address_opt
-builder __tact_store_address_opt(builder b, slice address) inline;
 
 ;; __tact_create_address
 slice __tact_create_address(int chain, int hash) inline;
@@ -41,6 +35,9 @@ builder __tact_store_bool(builder b, int v) inline;
 
 ;; __tact_slice_eq_bits
 int __tact_slice_eq_bits(slice a, slice b) inline;
+
+;; __tact_slice_eq
+int __tact_slice_eq(slice a, slice b) inline;
 
 ;; __tact_dict_set_code
 cell __tact_dict_set_code(cell dict, int id, cell code) inline;
@@ -75,35 +72,23 @@ builder $DeployOk$_store(builder build_0, (int) v) inline;
 ;; $DeployOk$_store_cell
 cell $DeployOk$_store_cell((int) v) inline;
 
-;; $TokenTransferInternal$_store
-builder $TokenTransferInternal$_store(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref;
+;; $JettonInternalTransfer$_store
+builder $JettonInternalTransfer$_store(builder build_0, (int, int, slice, slice, int, slice) v) inline_ref;
 
-;; $TokenTransferInternal$_store_cell
-cell $TokenTransferInternal$_store_cell((int, int, slice, slice, int, slice) v) inline;
+;; $JettonInternalTransfer$_store_cell
+cell $JettonInternalTransfer$_store_cell((int, int, slice, slice, int, slice) v) inline;
 
-;; $TokenBurnNotification$_load
-(slice, ((int, int, slice, slice))) $TokenBurnNotification$_load(slice sc_0) inline;
-
-;; $TokenExcesses$_store
-builder $TokenExcesses$_store(builder build_0, (int) v) inline;
-
-;; $TokenExcesses$_store_cell
-cell $TokenExcesses$_store_cell((int) v) inline;
-
-;; $TokenUpdateContent$_load
-(slice, ((cell))) $TokenUpdateContent$_load(slice sc_0) inline;
-
-;; $ProvideWalletAddress$_load
-(slice, ((int, slice, int))) $ProvideWalletAddress$_load(slice sc_0) inline;
-
-;; $TakeWalletAddress$_store
-builder $TakeWalletAddress$_store(builder build_0, (int, slice, slice) v) inline;
-
-;; $TakeWalletAddress$_store_cell
-cell $TakeWalletAddress$_store_cell((int, slice, slice) v) inline;
+;; $JettonBurnNotification$_load
+(slice, ((int, int, slice, slice))) $JettonBurnNotification$_load(slice sc_0) inline;
 
 ;; $Mint$_load
-(slice, ((int, slice, slice, slice, int, cell))) $Mint$_load(slice sc_0) inline_ref;
+(slice, ((slice, int, slice, slice, int, cell))) $Mint$_load(slice sc_0) inline_ref;
+
+;; $MintConfig$_store
+builder $MintConfig$_store(builder build_0, (slice, int, int, slice, int, int) v) inline_ref;
+
+;; $MintConfig$_load
+(slice, ((slice, int, int, slice, int, int))) $MintConfig$_load(slice sc_0) inline_ref;
 
 ;; $MerkleRoot$_load
 (slice, ((slice))) $MerkleRoot$_load(slice sc_0) inline;
@@ -111,20 +96,17 @@ cell $TakeWalletAddress$_store_cell((int, slice, slice) v) inline;
 ;; $MerkleAdmin$_load
 (slice, ((slice))) $MerkleAdmin$_load(slice sc_0) inline;
 
-;; $MintSetting$_load
-(slice, ((int, int))) $MintSetting$_load(slice sc_0) inline;
+;; $ClaimTransfer$_store
+builder $ClaimTransfer$_store(builder build_0, (int, int, slice, slice, int, slice, slice) v) inline_ref;
 
-;; $ClaimInfo$_store
-builder $ClaimInfo$_store(builder build_0, (slice, int, int, slice, int, int) v) inline_ref;
-
-;; $ClaimInfo$_load
-(slice, ((slice, int, int, slice, int, int))) $ClaimInfo$_load(slice sc_0) inline_ref;
+;; $ClaimTransfer$_store_cell
+cell $ClaimTransfer$_store_cell((int, int, slice, slice, int, slice, slice) v) inline;
 
 ;; $Tweetfi$_store
-builder $Tweetfi$_store(builder build_0, (int, slice, cell, int, (slice, int, int, slice, int, int), int) v) inline;
+builder $Tweetfi$_store(builder build_0, (int, int, slice, cell, int, (slice, int, int, slice, int, int)) v) inline;
 
 ;; $Tweetfi$_load
-(slice, ((int, slice, cell, int, (slice, int, int, slice, int, int), int))) $Tweetfi$_load(slice sc_0) inline;
+(slice, ((int, int, slice, cell, int, (slice, int, int, slice, int, int)))) $Tweetfi$_load(slice sc_0) inline;
 
 ;; $StateInit$_get_code
 _ $StateInit$_get_code((cell, cell) v) inline;
@@ -132,26 +114,35 @@ _ $StateInit$_get_code((cell, cell) v) inline;
 ;; $StateInit$_not_null
 ((cell, cell)) $StateInit$_not_null(tuple v) inline;
 
-;; $Context$_get_value
-_ $Context$_get_value((int, slice, int, slice) v) inline;
-
 ;; $JettonData$_to_external
 (int, int, slice, cell, cell) $JettonData$_to_external(((int, int, slice, cell, cell)) v) inline;
 
-;; $JettonDefaultWallet$init$_store
-builder $JettonDefaultWallet$init$_store(builder build_0, (slice, slice) v) inline;
+;; $Mint$_from_tuple
+(slice, int, slice, slice, int, cell) $Mint$_from_tuple(tuple v) inline;
+
+;; $TweetfiWallet$init$_store
+builder $TweetfiWallet$init$_store(builder build_0, (slice, slice) v) inline;
 
 ;; $Tweetfi$init$_load
-(slice, ((cell, int, (slice, int, int, slice, int, int)))) $Tweetfi$init$_load(slice sc_0) inline;
+(slice, ((slice, cell, int, (slice, int, int, slice, int, int)))) $Tweetfi$init$_load(slice sc_0) inline;
 
 ;; $Tweetfi$_contract_init
-(int, slice, cell, int, (slice, int, int, slice, int, int), int) $Tweetfi$_contract_init(cell $content, int $max_supply, (slice, int, int, slice, int, int) $claim_info) impure inline_ref;
+(int, int, slice, cell, int, (slice, int, int, slice, int, int)) $Tweetfi$_contract_init(slice $owner, cell $jetton_content, int $max_supply, (slice, int, int, slice, int, int) $mint_config) impure inline_ref;
 
 ;; $Tweetfi$_contract_load
-(int, slice, cell, int, (slice, int, int, slice, int, int), int) $Tweetfi$_contract_load() impure inline_ref;
+(int, int, slice, cell, int, (slice, int, int, slice, int, int)) $Tweetfi$_contract_load() impure inline_ref;
 
 ;; $Tweetfi$_contract_store
-() $Tweetfi$_contract_store((int, slice, cell, int, (slice, int, int, slice, int, int), int) v) impure inline;
+() $Tweetfi$_contract_store((int, int, slice, cell, int, (slice, int, int, slice, int, int)) v) impure inline;
+
+;; $global_emptyCell
+cell $global_emptyCell() impure inline;
+
+;; $Cell$_fun_asSlice
+slice $Cell$_fun_asSlice(cell $self) impure inline;
+
+;; $global_emptySlice
+slice $global_emptySlice() impure inline;
 
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
@@ -159,65 +150,71 @@ slice $global_contractAddress((cell, cell) $s) impure inline;
 ;; $global_send
 () $global_send((int, slice, int, int, cell, cell, cell) $params) impure inline_ref;
 
-;; $Cell$_fun_asSlice
-slice $Cell$_fun_asSlice(cell $self) impure inline;
-
-;; $JettonDefaultWallet$_init_child
-(cell, cell) $JettonDefaultWallet$_init_child(cell sys', slice $owner, slice $master) inline_ref;
+;; $TweetfiWallet$_init_child
+(cell, cell) $TweetfiWallet$_init_child(cell sys', slice $owner, slice $jetton_master) inline_ref;
 
 ;; $SendParameters$_constructor_bounce_to_value_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_bounce_to_value_mode_body_code_data(int bounce, slice to, int value, int mode, cell body, cell code, cell data) inline;
 
-;; $Tweetfi$_fun_max_supply
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), int) $Tweetfi$_fun_max_supply((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref;
-
-;; $Tweetfi$_fun_forward
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_forward((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
-
-;; $Tweetfi$_fun_notify
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_notify((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, cell $body) impure inline;
-
 ;; $SendParameters$_constructor_to_value_bounce_mode_body_code_data
 ((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode_body_code_data(slice to, int value, int bounce, int mode, cell body, cell code, cell data) inline;
 
-;; $TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload
-((int, int, slice, slice, int, slice)) $TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload(int query_id, int amount, slice from, slice response_destination, int forward_ton_amount, slice forward_payload) inline;
+;; $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload
+((int, int, slice, slice, int, slice)) $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, slice forward_payload) inline;
 
-;; $Tweetfi$_fun_getJettonWalletInit
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), (cell, cell)) $Tweetfi$_fun_getJettonWalletInit((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $address) impure inline_ref;
+;; $Tweetfi$_fun__sha128
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), slice) $Tweetfi$_fun__sha128((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $s) impure inline_ref;
 
-;; $Tweetfi$_fun_mint
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_mint((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, int $amount, slice $response_destination, int $current_hash) impure inline_ref;
+;; $Tweetfi$_fun_verify_proof
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_verify_proof((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $target_hash, cell $proof, int $proof_length) impure inline_ref;
 
-;; $Tweetfi$_fun_requireSenderAsWalletOwner
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_requireSenderAsWalletOwner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $owner) impure inline_ref;
+;; $Tweetfi$_fun_testmint
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_testmint((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice, int, slice, slice, int, cell) $msg) impure inline_ref;
 
-;; $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code
-((int, int, slice, cell, cell)) $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code(int total_supply, int mintable, slice owner, cell content, cell wallet_code) inline;
+;; $Tweetfi$_fun_max_supply
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_max_supply((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self) impure inline_ref;
+
+;; $Tweetfi$_fun__merkel_mint_validate
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__merkel_mint_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice, int, slice, slice, int, cell) $msg) impure inline_ref;
+
+;; $Tweetfi$_fun_calculate_jetton_wallet_init
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), (cell, cell)) $Tweetfi$_fun_calculate_jetton_wallet_init((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $owner_address) impure inline;
+
+;; $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid
+((int, int, slice, slice, int, slice, slice)) $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, slice forward_payload, slice txid) inline;
+
+;; $Tweetfi$_fun__mint
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__mint((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (slice, slice, int, cell, int, slice, slice) $msg) impure inline;
+
+;; $Tweetfi$_fun_forward
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun_forward((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref;
+
+;; $Tweetfi$_fun_notify
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun_notify((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, cell $body) impure inline;
+
+;; $Tweetfi$_fun__mint_validate
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__mint_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (slice, slice, int, cell, int, slice, slice) $msg) impure inline;
+
+;; $Tweetfi$_fun__burn_notification_validate
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__burn_notification_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice) $msg) impure inline;
+
+;; $SendParameters$_constructor_to_value_bounce_mode
+((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode(slice to, int value, int bounce, int mode) inline;
+
+;; $Tweetfi$_fun__burn_notification
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__burn_notification((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice) $msg) impure inline;
+
+;; $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code
+((int, int, slice, cell, cell)) $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code(int total_supply, int mintable, slice admin_address, cell jetton_content, cell jetton_wallet_code) inline;
 
 ;; $Tweetfi$_fun_get_jetton_data
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), (int, int, slice, cell, cell)) $Tweetfi$_fun_get_jetton_data((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref;
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), (int, int, slice, cell, cell)) $Tweetfi$_fun_get_jetton_data((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self) impure inline_ref;
 
 ;; $Tweetfi$_fun_get_wallet_address
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), slice) $Tweetfi$_fun_get_wallet_address((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $owner) impure inline_ref;
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), slice) $Tweetfi$_fun_get_wallet_address((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $owner_address) impure inline_ref;
 
-;; $Tweetfi$_fun_requireOwner
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_requireOwner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref;
-
-;; $Tweetfi$_fun_owner
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), slice) $Tweetfi$_fun_owner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref;
-
-;; $SendParameters$_constructor_to_value_bounce_mode_body
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_bounce_mode_body(slice to, int value, int bounce, int mode, cell body) inline;
-
-;; $TokenExcesses$_constructor_query_id
-((int)) $TokenExcesses$_constructor_query_id(int query_id) inline;
-
-;; $SendParameters$_constructor_to_value_mode_body
-((int, slice, int, int, cell, cell, cell)) $SendParameters$_constructor_to_value_mode_body(slice to, int value, int mode, cell body) inline;
-
-;; $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address
-((int, slice, slice)) $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address(int query_id, slice wallet_address, slice owner_address) inline;
+;; $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid
+((slice, slice, int, cell, int, slice, slice)) $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid(slice origin, slice receiver, int amount, cell custom_payload, int forward_ton_amount, slice forward_payload, slice txid) inline;
 
 ;; $DeployOk$_constructor_queryId
 ((int)) $DeployOk$_constructor_queryId(int queryId) inline;

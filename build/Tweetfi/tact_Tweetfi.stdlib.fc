@@ -16,26 +16,8 @@ slice __tact_verify_address(slice address) inline {
     return (cs, __tact_verify_address(raw));
 }
 
-(slice, slice) __tact_load_address_opt(slice cs) inline {
-    slice raw = cs~load_msg_addr();
-    if (raw.preload_uint(2) != 0) {
-        return (cs, __tact_verify_address(raw));
-    } else {
-        return (cs, null());
-    }
-}
-
 builder __tact_store_address(builder b, slice address) inline {
     return b.store_slice(__tact_verify_address(address));
-}
-
-builder __tact_store_address_opt(builder b, slice address) inline {
-    if (null?(address)) {
-        b = b.store_uint(0, 2);
-        return b;
-    } else {
-        return __tact_store_address(b, address);
-    }
 }
 
 slice __tact_create_address(int chain, int hash) inline {
@@ -83,6 +65,10 @@ int __tact_slice_eq_bits(slice a, slice b) inline {
     return equal_slice_bits(a, b);
 }
 
+int __tact_slice_eq(slice a, slice b) inline {
+    return (a.slice_hash() ==  b.slice_hash());
+}
+
 cell __tact_dict_set_code(cell dict, int id, cell code) inline {
     return udict_set_ref(dict, 16, id, code);
 }
@@ -94,6 +80,8 @@ cell __tact_dict_get_code(cell dict, int id) inline {
 }
 
 forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm "2 UNTUPLE";
+
+forall X0, X1, X2, X3, X4, X5 -> (X0, X1, X2, X3, X4, X5) __tact_tuple_destroy_6(tuple v) asm "6 UNTUPLE";
 
 tuple __tact_string_builder_start(builder b) inline {
     return tpush(tpush(empty_tuple(), b), null());
@@ -195,6 +183,19 @@ slice __tact_int_to_string(int src) inline_ref {
     return b.end_cell().begin_parse();
 }
 
+cell $global_emptyCell() impure inline {
+    return end_cell(begin_cell());
+}
+
+slice $Cell$_fun_asSlice(cell $self) impure inline {
+    var ($self) = $self;
+    return begin_parse($self);
+}
+
+slice $global_emptySlice() impure inline {
+    return $Cell$_fun_asSlice($global_emptyCell());
+}
+
 slice $global_contractAddress((cell, cell) $s) impure inline {
     var (($s'code, $s'data)) = $s;
     return __tact_compute_contract_address(0, $s'code, $s'data);
@@ -243,13 +244,8 @@ slice $global_contractAddress((cell, cell) $s) impure inline {
     send_raw_message($c, $params'mode);
 }
 
-slice $Cell$_fun_asSlice(cell $self) impure inline {
-    var ($self) = $self;
-    return begin_parse($self);
-}
-
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_forward((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun_forward((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $to, cell $body, int $bounce, tuple $init) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
     var ($init) = $init;
     cell $code = null();
     cell $data = null();
@@ -265,15 +261,15 @@ slice $Cell$_fun_asSlice(cell $self) impure inline {
         if (($balanceBeforeMessage < 0)) {
             raw_reserve(0, 0);
             $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (128 + 2), $body, $code, $data));
-            return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+            return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
         }
     }
     $global_send($SendParameters$_constructor_bounce_to_value_mode_body_code_data($bounce, $to, 0, (64 + 2), $body, $code, $data));
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_notify((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, cell $body) impure inline {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_forward(__tact_context_get_sender(), $body, false, null());
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun_notify((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, cell $body) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_forward(__tact_context_get_sender(), $body, false, null());
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }

@@ -1,6 +1,6 @@
 # TACT Compilation Report
-Contract: Tweetfi
-BOC Size: 3369 bytes
+Contract: TweetfiWallet
+BOC Size: 3507 bytes
 
 # Types
 Total Types: 21
@@ -90,17 +90,11 @@ TLB: `claim_transfer#8be50851 query_id:uint64 amount:coins from:address response
 Signature: `ClaimTransfer{query_id:uint64,amount:coins,from:address,response_address:address,forward_ton_amount:coins,forward_payload:remainder<slice>,txid:^string}`
 
 # Get Methods
-Total Get Methods: 4
+Total Get Methods: 2
 
-## testmint
-Argument: msg
+## get_illiquid_balance
 
-## max_supply
-
-## get_jetton_data
-
-## get_wallet_address
-Argument: owner_address
+## get_wallet_data
 
 # Error Codes
 2: Stack undeflow

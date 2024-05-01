@@ -1,9 +1,7 @@
 PROGRAM{
   DECLPROC __tact_verify_address
   DECLPROC __tact_load_address
-  DECLPROC __tact_load_address_opt
   DECLPROC __tact_store_address
-  DECLPROC __tact_store_address_opt
   DECLPROC __tact_create_address
   DECLPROC __tact_compute_contract_address
   DECLPROC __tact_my_balance
@@ -12,6 +10,7 @@ PROGRAM{
   DECLPROC __tact_context_get_sender
   DECLPROC __tact_store_bool
   DECLPROC __tact_slice_eq_bits
+  DECLPROC __tact_slice_eq
   DECLPROC __tact_dict_set_code
   DECLPROC __tact_dict_get_code
   DECLPROC __tact_string_builder_start
@@ -23,69 +22,65 @@ PROGRAM{
   DECLPROC $Deploy$_load
   DECLPROC $DeployOk$_store
   DECLPROC $DeployOk$_store_cell
-  DECLPROC $TokenTransferInternal$_store
-  DECLPROC $TokenTransferInternal$_store_cell
-  DECLPROC $TokenBurnNotification$_load
-  DECLPROC $TokenExcesses$_store
-  DECLPROC $TokenExcesses$_store_cell
-  DECLPROC $TokenUpdateContent$_load
-  DECLPROC $ProvideWalletAddress$_load
-  DECLPROC $TakeWalletAddress$_store
-  DECLPROC $TakeWalletAddress$_store_cell
+  DECLPROC $JettonInternalTransfer$_store
+  DECLPROC $JettonInternalTransfer$_store_cell
+  DECLPROC $JettonBurnNotification$_load
   DECLPROC $Mint$_load
+  DECLPROC $MintConfig$_store
+  DECLPROC $MintConfig$_load
   DECLPROC $MerkleRoot$_load
   DECLPROC $MerkleAdmin$_load
-  DECLPROC $MintSetting$_load
-  DECLPROC $ClaimInfo$_store
-  DECLPROC $ClaimInfo$_load
+  DECLPROC $ClaimTransfer$_store
+  DECLPROC $ClaimTransfer$_store_cell
   DECLPROC $Tweetfi$_store
   DECLPROC $Tweetfi$_load
   DECLPROC $StateInit$_get_code
   DECLPROC $StateInit$_not_null
-  DECLPROC $Context$_get_value
   DECLPROC $JettonData$_to_external
-  DECLPROC $JettonDefaultWallet$init$_store
+  DECLPROC $Mint$_from_tuple
+  DECLPROC $TweetfiWallet$init$_store
   DECLPROC $Tweetfi$init$_load
   DECLPROC $Tweetfi$_contract_init
   DECLPROC $Tweetfi$_contract_load
   DECLPROC $Tweetfi$_contract_store
+  DECLPROC $global_emptyCell
+  DECLPROC $Cell$_fun_asSlice
+  DECLPROC $global_emptySlice
   DECLPROC $global_contractAddress
   DECLPROC $global_send
-  DECLPROC $Cell$_fun_asSlice
-  DECLPROC $JettonDefaultWallet$_init_child
+  DECLPROC $TweetfiWallet$_init_child
   DECLPROC $SendParameters$_constructor_bounce_to_value_mode_body_code_data
+  DECLPROC $SendParameters$_constructor_to_value_bounce_mode_body_code_data
+  DECLPROC $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload
+  DECLPROC $Tweetfi$_fun__sha128
+  DECLPROC $Tweetfi$_fun_verify_proof
+  DECLPROC $Tweetfi$_fun_testmint
   DECLPROC $Tweetfi$_fun_max_supply
+  DECLPROC $Tweetfi$_fun__merkel_mint_validate
+  DECLPROC $Tweetfi$_fun_calculate_jetton_wallet_init
+  DECLPROC $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid
+  DECLPROC $Tweetfi$_fun__mint
   DECLPROC $Tweetfi$_fun_forward
   DECLPROC $Tweetfi$_fun_notify
-  DECLPROC $SendParameters$_constructor_to_value_bounce_mode_body_code_data
-  DECLPROC $TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload
-  DECLPROC $Tweetfi$_fun_getJettonWalletInit
-  DECLPROC $Tweetfi$_fun_mint
-  DECLPROC $Tweetfi$_fun_requireSenderAsWalletOwner
-  DECLPROC $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code
+  DECLPROC $Tweetfi$_fun__mint_validate
+  DECLPROC $Tweetfi$_fun__burn_notification_validate
+  DECLPROC $SendParameters$_constructor_to_value_bounce_mode
+  DECLPROC $Tweetfi$_fun__burn_notification
+  DECLPROC $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code
   DECLPROC $Tweetfi$_fun_get_jetton_data
   DECLPROC $Tweetfi$_fun_get_wallet_address
-  DECLPROC $Tweetfi$_fun_requireOwner
-  DECLPROC $Tweetfi$_fun_owner
-  DECLPROC $SendParameters$_constructor_to_value_bounce_mode_body
-  DECLPROC $TokenExcesses$_constructor_query_id
-  DECLPROC $SendParameters$_constructor_to_value_mode_body
-  DECLPROC $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address
+  DECLPROC $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid
   DECLPROC $DeployOk$_constructor_queryId
   DECLPROC $Tweetfi$_internal_binary_Mint
-  DECLPROC $Tweetfi$_internal_text_fcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6
-  DECLPROC $Tweetfi$_internal_text_dc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0
+  DECLPROC $Tweetfi$_internal_text_e0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596
   DECLPROC $Tweetfi$_internal_binary_MerkleRoot
   DECLPROC $Tweetfi$_internal_binary_MerkleAdmin
-  DECLPROC $Tweetfi$_internal_binary_MintSetting
-  DECLPROC $Tweetfi$_internal_binary_TokenUpdateContent
-  DECLPROC $Tweetfi$_internal_binary_TokenBurnNotification
-  DECLPROC $Tweetfi$_internal_binary_ProvideWalletAddress
+  DECLPROC $Tweetfi$_internal_binary_JettonBurnNotification
   DECLPROC $Tweetfi$_internal_binary_Deploy
+  72120 DECLMETHOD %testmint
   102571 DECLMETHOD %max_supply
   106029 DECLMETHOD %get_jetton_data
   103289 DECLMETHOD %get_wallet_address
-  83229 DECLMETHOD %owner
   113617 DECLMETHOD supported_interfaces
   121275 DECLMETHOD get_abi_ipfs
   115390 DECLMETHOD lazy_deployment_completed
@@ -116,34 +111,9 @@ PROGRAM{
     SWAP
     __tact_verify_address INLINECALLDICT
   }>
-  __tact_load_address_opt PROCINLINE:<{
-    LDMSGADDR
-    OVER
-    2 PLDU
-    0 NEQINT
-    IF:<{
-      SWAP
-      __tact_verify_address INLINECALLDICT
-    }>ELSE<{
-      NIP
-      PUSHNULL
-    }>
-  }>
   __tact_store_address PROCINLINE:<{
     __tact_verify_address INLINECALLDICT
     STSLICER
-  }>
-  __tact_store_address_opt PROCINLINE:<{
-    DUP
-    ISNULL
-    IF:<{
-      DROP
-      0 PUSHINT
-      SWAP
-      2 STU
-    }>ELSE<{
-      __tact_store_address INLINECALLDICT
-    }>
   }>
   __tact_create_address PROCINLINE:<{
     NEWC
@@ -200,6 +170,13 @@ PROGRAM{
   }>
   __tact_slice_eq_bits PROCINLINE:<{
     SDEQ
+  }>
+  __tact_slice_eq PROCINLINE:<{
+    SWAP
+    HASHSU
+    SWAP
+    HASHSU
+    EQUAL
   }>
   __tact_dict_set_code PROCINLINE:<{
     s0 s2 XCHG
@@ -410,7 +387,7 @@ PROGRAM{
     $DeployOk$_store INLINECALLDICT
     ENDC
   }>
-  $TokenTransferInternal$_store PROCREF:<{
+  $JettonInternalTransfer$_store PROCREF:<{
     395134233 PUSHINT
     s0 s7 XCHG2
     32 STU
@@ -421,19 +398,19 @@ PROGRAM{
     SWAP
     __tact_store_address INLINECALLDICT
     SWAP
-    __tact_store_address_opt INLINECALLDICT
+    __tact_store_address INLINECALLDICT
     SWAP
     STGRAMS
     SWAP
     STSLICER
   }>
-  $TokenTransferInternal$_store_cell PROCINLINE:<{
+  $JettonInternalTransfer$_store_cell PROCINLINE:<{
     NEWC
     6 -ROLL
-    $TokenTransferInternal$_store INLINECALLDICT
+    $JettonInternalTransfer$_store INLINECALLDICT
     ENDC
   }>
-  $TokenBurnNotification$_load PROCINLINE:<{
+  $JettonBurnNotification$_load PROCINLINE:<{
     32 LDU
     SWAP
     2078119902 PUSHINT
@@ -443,70 +420,20 @@ PROGRAM{
     LDGRAMS
     __tact_load_address INLINECALLDICT
     SWAP
-    __tact_load_address_opt INLINECALLDICT
+    __tact_load_address INLINECALLDICT
     s1 s4 XCHG
     s3 s3 s0 XCHG3
-  }>
-  $TokenExcesses$_store PROCINLINE:<{
-    3576854235 PUSHINT
-    ROT
-    32 STU
-    64 STU
-  }>
-  $TokenExcesses$_store_cell PROCINLINE:<{
-    NEWC
-    SWAP
-    $TokenExcesses$_store INLINECALLDICT
-    ENDC
-  }>
-  $TokenUpdateContent$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    2937889386 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    LDREF
-    SWAP
-  }>
-  $ProvideWalletAddress$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    745978227 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    64 LDU
-    __tact_load_address INLINECALLDICT
-    SWAP
-    1 LDI
-    3 -ROLL
-  }>
-  $TakeWalletAddress$_store PROCINLINE:<{
-    3513996288 PUSHINT
-    s0 s4 XCHG2
-    32 STU
-    s1 s2 XCHG
-    64 STU
-    SWAP
-    __tact_store_address INLINECALLDICT
-    SWAP
-    STSLICER
-  }>
-  $TakeWalletAddress$_store_cell PROCINLINE:<{
-    NEWC
-    3 -ROLL
-    $TakeWalletAddress$_store INLINECALLDICT
-    ENDC
   }>
   $Mint$_load PROCREF:<{
     32 LDU
     SWAP
-    4031658166 PUSHINT
+    3991647442 PUSHINT
     EQUAL
     129 THROWIFNOT
-    257 PUSHINT
-    LDIX
     __tact_load_address INLINECALLDICT
     SWAP
+    257 PUSHINT
+    LDIX
     LDREF
     SWAP
     CTOS
@@ -517,6 +444,35 @@ PROGRAM{
     SWAP
     8 LDU
     LDREF
+    6 -ROLL
+  }>
+  $MintConfig$_store PROCREF:<{
+    NEWC
+    s0 s6 XCHG2
+    STSLICER
+    ENDC
+    s0 s6 XCHG2
+    STREF
+    s1 s3 XCHG
+    32 STU
+    32 STU
+    SWAP
+    __tact_store_address INLINECALLDICT
+    s1 s2 XCHG
+    64 STU
+    64 STU
+  }>
+  $MintConfig$_load PROCREF:<{
+    LDREF
+    SWAP
+    CTOS
+    SWAP
+    32 LDU
+    32 LDU
+    __tact_load_address INLINECALLDICT
+    SWAP
+    64 LDU
+    64 LDU
     6 -ROLL
   }>
   $MerkleRoot$_load PROCINLINE:<{
@@ -537,74 +493,63 @@ PROGRAM{
     129 THROWIFNOT
     __tact_load_address INLINECALLDICT
   }>
-  $MintSetting$_load PROCINLINE:<{
-    32 LDU
-    SWAP
-    392978134 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    32 LDU
-    64 LDU
-    -ROT
-  }>
-  $ClaimInfo$_store PROCREF:<{
-    NEWC
-    s0 s6 XCHG2
-    STSLICER
-    ENDC
-    s0 s6 XCHG2
-    STREF
-    s1 s3 XCHG
+  $ClaimTransfer$_store PROCREF:<{
+    2347042897 PUSHINT
+    s0 s8 XCHG2
     32 STU
-    32 STU
+    s1 s6 XCHG
+    64 STU
+    s0 s4 XCHG2
+    STGRAMS
+    ROT
+    __tact_store_address INLINECALLDICT
     SWAP
     __tact_store_address INLINECALLDICT
-    s1 s2 XCHG
-    64 STU
-    64 STU
+    SWAP
+    STGRAMS
+    SWAP
+    STSLICER
+    NEWC
+    ROT
+    STSLICER
+    ENDC
+    SWAP
+    STREF
   }>
-  $ClaimInfo$_load PROCREF:<{
-    LDREF
-    SWAP
-    CTOS
-    SWAP
-    32 LDU
-    32 LDU
-    __tact_load_address INLINECALLDICT
-    SWAP
-    64 LDU
-    64 LDU
-    6 -ROLL
+  $ClaimTransfer$_store_cell PROCINLINE:<{
+    NEWC
+    7 -ROLL
+    $ClaimTransfer$_store INLINECALLDICT
+    ENDC
   }>
   $Tweetfi$_store PROCINLINE:<{
     s11 s10 XCHG2
     STGRAMS
-    s0 s8 XCHG2
-    __tact_store_address INLINECALLDICT
-    s1 s6 XCHG
-    STREF
-    s1 s4 XCHG
+    s1 s8 XCHG
     1 STI
-    s5 s1 s6 XCHG3
-    s4 s4 s7 XCHG3
-    $ClaimInfo$_store INLINECALLDICT
-    SWAP
+    s0 s6 XCHG2
+    __tact_store_address INLINECALLDICT
+    s1 s4 XCHG
+    STREF
+    ROT
     STGRAMS
+    7 0 REVERSE
+    SWAP
+    $MintConfig$_store INLINECALLDICT
   }>
   $Tweetfi$_load PROCINLINE:<{
     LDGRAMS
+    1 LDI
     __tact_load_address INLINECALLDICT
     SWAP
     LDREF
-    1 LDI
-    $ClaimInfo$_load INLINECALLDICT
-    s0 s6 XCHG
     LDGRAMS
-    s0 s11 XCHG
-    s0 s10 XCHG
-    s0 s9 XCHG
-    s0 s8 XCHG
-    s7 s7 XCHG2
+    $MintConfig$_load INLINECALLDICT
+    s6 s11 XCHG
+    s6 s10 XCHG
+    s6 s9 XCHG
+    s6 s8 XCHG
+    s6 s7 XCHG
   }>
   $StateInit$_get_code PROCINLINE:<{
     DROP
@@ -615,35 +560,37 @@ PROGRAM{
     128 THROWIF
     2 UNTUPLE
   }>
-  $Context$_get_value PROCINLINE:<{
-    s1 s3 XCHG
-    3 BLKDROP
-  }>
   $JettonData$_to_external PROCINLINE:<{
   }>
-  $JettonDefaultWallet$init$_store PROCINLINE:<{
+  $Mint$_from_tuple PROCINLINE:<{
+    6 UNTUPLE
+    s0 s5 XCHG
+    __tact_verify_address INLINECALLDICT
+    s0 s5 XCHG
+  }>
+  $TweetfiWallet$init$_store PROCINLINE:<{
     -ROT
     __tact_store_address INLINECALLDICT
     SWAP
     __tact_store_address INLINECALLDICT
   }>
   $Tweetfi$init$_load PROCINLINE:<{
+    __tact_load_address INLINECALLDICT
+    SWAP
     LDREF
     257 PUSHINT
     LDIX
-    $ClaimInfo$_load INLINECALLDICT
+    $MintConfig$_load INLINECALLDICT
+    s6 s9 XCHG
     s6 s8 XCHG
     s6 s7 XCHG
   }>
   $Tweetfi$_contract_init PROCREF:<{
     0 PUSHINT
-    __tact_context_get_sender INLINECALLDICT
-    s9 s8 XCHG2
-    s1 s7 XCHG
+    s0 s9 XCHG
     TRUE
-    s6 s1 s7 XCHG3
-    s4 s1 s5 XCHG3
-    s3 s3 XCHG2
+    s0 s9 XCHG
+    7 2 BLKSWAP
   }>
   $Tweetfi$_contract_load PROCREF:<{
     c4 PUSH
@@ -663,9 +610,9 @@ PROGRAM{
     EQUAL
     137 THROWIFNOT
     $Tweetfi$init$_load INLINECALLDICT
-    s0 s8 XCHG
+    s0 s9 XCHG
     ENDS
-    7 ROLL
+    8 ROLL
     $Tweetfi$_contract_init INLINECALLDICT
   }>
   $Tweetfi$_contract_store PROCINLINE:<{
@@ -680,6 +627,17 @@ PROGRAM{
     $Tweetfi$_store INLINECALLDICT
     ENDC
     c4 POP
+  }>
+  $global_emptyCell PROCINLINE:<{
+    NEWC
+    ENDC
+  }>
+  $Cell$_fun_asSlice PROCINLINE:<{
+    CTOS
+  }>
+  $global_emptySlice PROCINLINE:<{
+    $global_emptyCell INLINECALLDICT
+    $Cell$_fun_asSlice INLINECALLDICT
   }>
   $global_contractAddress PROCINLINE:<{
     0 PUSHINT
@@ -788,20 +746,17 @@ PROGRAM{
     SWAP
     SENDRAWMSG
   }>
-  $Cell$_fun_asSlice PROCINLINE:<{
-    CTOS
-  }>
-  $JettonDefaultWallet$_init_child PROCREF:<{
+  $TweetfiWallet$_init_child PROCREF:<{
     s0 s2 XCHG
     CTOS
     LDDICT
     DROP
     NEWDICT
     SWAP
-    55471 PUSHINT
+    45083 PUSHINT
     __tact_dict_get_code INLINECALLDICT
     SWAP
-    55471 PUSHINT
+    45083 PUSHINT
     s2 PUSH
     __tact_dict_set_code INLINECALLDICT
     NEWC
@@ -815,13 +770,260 @@ PROGRAM{
     SWAP
     1 STI
     s0 s0 s3 XCHG3
-    $JettonDefaultWallet$init$_store INLINECALLDICT
+    $TweetfiWallet$init$_store INLINECALLDICT
     ENDC
   }>
   $SendParameters$_constructor_bounce_to_value_mode_body_code_data PROCINLINE:<{
   }>
+  $SendParameters$_constructor_to_value_bounce_mode_body_code_data PROCINLINE:<{
+    s4 s6 XCHG
+    s4 s5 XCHG
+  }>
+  $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload PROCINLINE:<{
+    s2 s3 XCHG
+  }>
+  $Tweetfi$_fun__sha128 PROCREF:<{
+    SHA256U
+    128 RSHIFT#
+    __tact_int_to_string INLINECALLDICT
+  }>
+  $Tweetfi$_fun_verify_proof PROCREF:<{
+    TRUE
+    s0 s2 XCHG
+    CTOS
+    SWAP
+    REPEAT:<{
+      SWAP
+      NOT
+      IF:<{
+        DUP
+        SREMPTY
+        NOT
+        IF:<{
+          LDREF
+          DROP
+          CTOS
+        }>
+      }>
+      128 LDU
+      1 LDU
+      __tact_string_builder_start_string INLINECALLDICT
+      s0 s2 XCHG
+      0 EQINT
+      IF:<{
+        s0 s2 XCHG
+        __tact_int_to_string INLINECALLDICT
+        __tact_string_builder_append INLINECALLDICT
+        ROT
+        __tact_string_builder_append INLINECALLDICT
+      }>ELSE<{
+        s0 s3 XCHG
+        __tact_string_builder_append INLINECALLDICT
+        SWAP
+        __tact_int_to_string INLINECALLDICT
+        __tact_string_builder_append INLINECALLDICT
+      }>
+      __tact_string_builder_end_slice INLINECALLDICT
+      s11 s12 XCHG
+      s10 s12 XCHG
+      s1 s12 XCHG
+      s1 s9 XCHG
+      s1 s8 XCHG
+      s1 s7 XCHG
+      s1 s6 XCHG
+      s1 s5 XCHG
+      s1 s4 XCHG
+      s3 s3 s0 XCHG3
+      $Tweetfi$_fun__sha128 INLINECALLDICT
+      12 ROLL
+      FALSE
+      SWAP
+    }>
+    2DROP
+    s6 s(-1) PUXC
+    __tact_slice_eq INLINECALLDICT
+  }>
+  $Tweetfi$_fun_testmint PROCREF:<{
+    s5 POP
+    __tact_string_builder_start_string INLINECALLDICT
+    ROT
+    __tact_string_builder_append INLINECALLDICT
+    ROT
+    __tact_string_builder_append INLINECALLDICT
+    s0 s2 XCHG
+    __tact_int_to_string INLINECALLDICT
+    s1 s2 XCHG
+    __tact_string_builder_append INLINECALLDICT
+    __tact_string_builder_end_slice INLINECALLDICT
+    s11 s13 XCHG
+    5 9 REVERSE
+    s8 s12 XCHG
+    s7 s13 XCHG
+    s6 s12 XCHG
+    s5 s13 XCHG
+    s4 s12 XCHG
+    s3 s13 XCHG
+    s12 s13 s0 XCHG3
+    $Tweetfi$_fun__sha128 INLINECALLDICT
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 s9 PUSH3
+    s11 s10 PUSH2
+    s13 22 s() XCHG
+    s12 21 s() XCHG
+    s11 20 s() XCHG
+    s10 19 s() XCHG
+    s9 18 s() XCHG
+    s8 17 s() XCHG
+    s7 16 s() XCHG
+    s6 s15 XCHG
+    s5 s14 XCHG
+    s4 22 s() XCHG
+    s3 21 s() XCHG
+    s2 20 s() XCHG
+    s1 23 s() XCHG
+    s0 24 s() XCHG
+    $Tweetfi$_fun_verify_proof INLINECALLDICT
+    11 1 BLKDROP2
+    s6 s11 XCHG
+    s5 s10 XCHG
+    s4 s9 XCHG
+    s3 s8 XCHG
+    s7 s6 s0 XCHG3
+    s4 s5 XCHG
+    s3 s4 XCHG
+    s2 s3 XCHG
+  }>
   $Tweetfi$_fun_max_supply PROCREF:<{
-    DUP
+    s6 PUSH
+  }>
+  $Tweetfi$_fun__merkel_mint_validate PROCREF:<{
+    s5 POP
+    __tact_string_builder_start_string INLINECALLDICT
+    ROT
+    __tact_string_builder_append INLINECALLDICT
+    ROT
+    __tact_string_builder_append INLINECALLDICT
+    s0 s2 XCHG
+    __tact_int_to_string INLINECALLDICT
+    s1 s2 XCHG
+    __tact_string_builder_append INLINECALLDICT
+    __tact_string_builder_end_slice INLINECALLDICT
+    32067 PUSHINT
+    s14 s13 s12 PUSH3
+    s14 s13 s12 PUSH3
+    s14 s13 s12 PUSH3
+    s14 s13 PUSH2
+    s11 25 s() XCHG
+    s10 24 s() XCHG
+    s9 23 s() XCHG
+    s8 22 s() XCHG
+    s7 21 s() XCHG
+    s6 20 s() XCHG
+    s5 19 s() XCHG
+    s4 18 s() XCHG
+    s3 17 s() XCHG
+    s2 16 s() XCHG
+    s15 s12 XCHG2
+    $Tweetfi$_fun__sha128 INLINECALLDICT
+    11 1 BLKDROP2
+    2SWAP
+    $Tweetfi$_fun_verify_proof INLINECALLDICT
+    -1 EQINT
+    s1 s12 XCHG
+    THROWANYIFNOT
+    10 ROLL
+  }>
+  $Tweetfi$_fun_calculate_jetton_wallet_init PROCINLINE:<{
+    __tact_context_sys GETGLOB
+    MYADDR
+    s1 s2 XCHG
+    $TweetfiWallet$_init_child INLINECALLDICT
+  }>
+  $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid PROCINLINE:<{
+    s3 s4 XCHG
+  }>
+  $Tweetfi$_fun__mint PROCINLINE:<{
+    s3 POP
+    s6 POP
+    s6 POP
+    s6 POP
+    s6 POP
+    s11 16 s() XCHG
+    s10 s15 XCHG
+    s9 s14 XCHG
+    s8 s13 XCHG
+    s7 s12 XCHG
+    s6 16 s() XCHG
+    s5 s15 XCHG
+    s4 s14 XCHG
+    s3 s13 XCHG
+    s2 s12 XCHG
+    s1 16 s() XCHG
+    $Tweetfi$_fun_calculate_jetton_wallet_init INLINECALLDICT
+    s0 s12 XCHG
+    16 s() PUSH
+    ADD
+    s15 PUSH
+    ISNULL
+    IF:<{
+      s15 POP
+      s0 s11 PUSH2
+      $global_contractAddress INLINECALLDICT
+      0 PUSHINT
+      TRUE
+      64 PUSHINT
+      s2 PUSH
+      MYADDR
+      s1 s5 XCHG
+      s4 21 s() XCHG
+      s3 22 s() XCHG
+      s0 s2 XCHG
+      s1 19 s() XCHG
+      s0 18 s() XCHG
+      $JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload INLINECALLDICT
+      $JettonInternalTransfer$_store_cell INLINECALLDICT
+      s6 s14 XCHG
+      s5 16 s() XCHG
+      s4 17 s() XCHG
+      s3 s13 XCHG
+      s0 s1 s12 XCHG3
+      $SendParameters$_constructor_to_value_bounce_mode_body_code_data INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>ELSE<{
+      s1 s12 PUSH2
+      $global_contractAddress INLINECALLDICT
+      0 PUSHINT
+      TRUE
+      64 PUSHINT
+      s2 PUSH
+      MYADDR
+      s0 21 s() XCHG
+      __tact_not_null INLINECALLDICT
+      s1 s6 XCHG
+      s5 22 s() XCHG
+      s4 23 s() XCHG
+      s3 21 s() XCHG
+      s2 20 s() XCHG
+      s1 19 s() XCHG
+      $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid INLINECALLDICT
+      $ClaimTransfer$_store_cell INLINECALLDICT
+      s6 16 s() XCHG
+      s5 17 s() XCHG
+      s4 s15 XCHG
+      s3 s14 XCHG
+      s0 s1 s12 XCHG3
+      $SendParameters$_constructor_to_value_bounce_mode_body_code_data INLINECALLDICT
+      $global_send INLINECALLDICT
+      s8 s10 XCHG
+      s8 s9 XCHG
+      s6 s8 XCHG
+      s6 s7 XCHG
+    }>
+    s8 s10 XCHG
+    5 5 BLKSWAP
+    s2 s4 XCHG
+    s2 s3 XCHG
   }>
   $Tweetfi$_fun_forward PROCREF:<{
     PUSHNULL
@@ -852,349 +1054,286 @@ PROGRAM{
     PUSHNULL
     $Tweetfi$_fun_forward INLINECALLDICT
   }>
-  $SendParameters$_constructor_to_value_bounce_mode_body_code_data PROCINLINE:<{
-    s4 s6 XCHG
-    s4 s5 XCHG
-  }>
-  $TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload PROCINLINE:<{
-  }>
-  $Tweetfi$_fun_getJettonWalletInit PROCREF:<{
-    __tact_context_sys GETGLOB
-    MYADDR
-    s1 s2 XCHG
-    $JettonDefaultWallet$_init_child INLINECALLDICT
-  }>
-  $Tweetfi$_fun_mint PROCREF:<{
-    18668 PUSHINT
-    s12 PUSH
+  $Tweetfi$_fun__mint_validate PROCINLINE:<{
+    s9 s10 XCHG
+    10 BLKDROP
+    s9 PUSH
+    43365 PUSHINT
+    s0 s2 XCHG
+    __tact_slice_eq_bits INLINECALLDICT
     THROWANYIFNOT
-    s14 s2 XCPU
-    ADD
-    NEWC
-    ENDC
-    $Cell$_fun_asSlice INLINECALLDICT
-    s15 PUSH
-    0 NEQINT
-    IF:<{
-      DROP
-      s0 s14 XCHG
-      NEWC
-      256 STU
-      ENDC
-      $Cell$_fun_asSlice INLINECALLDICT
-      s0 s14 XCHG
-    }>ELSE<{
-      s15 POP
-    }>
-    s0 s11 XCHG
-    s10 s13 XCHG
-    s9 s12 XCHG
-    s0 s8 XCHG
-    s7 s13 XCHG
-    s6 s12 XCHG
-    s0 s5 XCHG
-    s4 s13 XCHG
-    s3 s12 XCHG
-    s0 s13 s12 XCHG3
-    $Tweetfi$_fun_getJettonWalletInit INLINECALLDICT
-    2DUP
-    $global_contractAddress INLINECALLDICT
-    0 PUSHINT
-    TRUE
-    64 PUSHINT
-    s2 PUSH
-    MYADDR
-    s4 s0 s4 XC2PU
-    s4 20 s() XCHG
-    s1 s3 XCHG
-    s2 21 s() XCHG
-    SWAP
-    s0 22 s() XCHG
-    $TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload INLINECALLDICT
-    $TokenTransferInternal$_store_cell INLINECALLDICT
-    s1 s6 XCHG
-    s5 16 s() XCHG
-    s4 s15 XCHG
-    s3 17 s() XCHG
-    s0 s2 XCHG
-    s1 17 s() XCHG
-    $SendParameters$_constructor_to_value_bounce_mode_body_code_data INLINECALLDICT
-    $global_send INLINECALLDICT
-    3 8 BLKSWAP
+    30061 PUSHINT
+    s10 PUSH
+    THROWANYIFNOT
   }>
-  $Tweetfi$_fun_requireSenderAsWalletOwner PROCREF:<{
-    __tact_context_get INLINECALLDICT
-    s2 s3 XCHG
-    3 BLKDROP
+  $Tweetfi$_fun__burn_notification_validate PROCINLINE:<{
+    s1 s5 XCHG
+    5 BLKDROP
+    s2 POP
     12 -ROLL
-    $Tweetfi$_fun_getJettonWalletInit INLINECALLDICT
+    $Tweetfi$_fun_calculate_jetton_wallet_init INLINECALLDICT
     SWAP
-    4429 PUSHINT
+    9739 PUSHINT
     s0 s2 XCHG
     $global_contractAddress INLINECALLDICT
-    s1 s13 XCHG
+    s0 s13 XCHG2
     __tact_slice_eq_bits INLINECALLDICT
     s1 s12 XCHG
     THROWANYIFNOT
     10 ROLL
   }>
-  $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code PROCINLINE:<{
+  $SendParameters$_constructor_to_value_bounce_mode PROCINLINE:<{
+    s3 s3 s0 XCHG3
+    PUSHNULL
+    PUSHNULL
+    PUSHNULL
+  }>
+  $Tweetfi$_fun__burn_notification PROCINLINE:<{
+    NIP
+    s5 s6 XCHG2
+    5 BLKDROP
+    s1 s12 XCHG
+    SUB
+    0 PUSHINT
+    DUP
+    __tact_create_address INLINECALLDICT
+    s12 PUSH
+    __tact_slice_eq_bits INLINECALLDICT
+    NOT
+    IF:<{
+      s0 s11 XCHG
+      0 PUSHINT
+      FALSE
+      66 PUSHINT
+      $SendParameters$_constructor_to_value_bounce_mode INLINECALLDICT
+      $global_send INLINECALLDICT
+    }>ELSE<{
+      s11 POP
+    }>
+  }>
+  $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code PROCINLINE:<{
   }>
   $Tweetfi$_fun_get_jetton_data PROCREF:<{
-    __tact_context_sys GETGLOB
+    s10 s9 s8 PUSH3
+    s10 s9 s8 PUSH3
+    s10 s9 s8 PUSH3
+    s10 s9 PUSH2
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
     MYADDR
-    s11 s(-1) PUXC
-    $JettonDefaultWallet$_init_child INLINECALLDICT
+    s11 26 s() XCHG
+    s10 25 s() XCHG
+    s9 24 s() XCHG
+    s8 23 s() XCHG
+    s7 22 s() XCHG
+    s6 21 s() XCHG
+    s5 20 s() XCHG
+    s4 19 s() XCHG
+    s3 18 s() XCHG
+    s2 17 s() XCHG
+    s1 16 s() XCHG
+    $Tweetfi$_fun_calculate_jetton_wallet_init INLINECALLDICT
+    11 2 BLKDROP2
     $StateInit$_get_code INLINECALLDICT
-    s11 s8 s(-2) PU2XC
-    s12 s11 s(-2) PU2XC
-    $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code INLINECALLDICT
+    s4 s8 XCHG
+    s3 s7 XCHG
+    s6 s5 s0 XCHG3
+    $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code INLINECALLDICT
+    s8 s15 XCHG
+    s7 s14 XCHG
+    s6 s13 XCHG
+    s5 s12 XCHG
+    s8 s11 XCHG
+    s7 s10 XCHG
+    s6 s9 XCHG
+    s5 s8 XCHG
+    s5 s7 XCHG
+    s5 s6 XCHG
   }>
   $Tweetfi$_fun_get_wallet_address PROCREF:<{
-    __tact_context_sys GETGLOB
-    MYADDR
-    s1 s2 XCHG
-    $JettonDefaultWallet$_init_child INLINECALLDICT
+    $Tweetfi$_fun_calculate_jetton_wallet_init INLINECALLDICT
     $global_contractAddress INLINECALLDICT
   }>
-  $Tweetfi$_fun_requireOwner PROCREF:<{
-    __tact_context_get_sender INLINECALLDICT
-    s10 s(-1) PUXC
-    __tact_slice_eq_bits INLINECALLDICT
-    132 THROWIFNOT
-  }>
-  $Tweetfi$_fun_owner PROCREF:<{
-    s9 PUSH
-  }>
-  $SendParameters$_constructor_to_value_bounce_mode_body PROCINLINE:<{
-    s2 s4 XCHG
-    s2 s3 XCHG
-    PUSHNULL
-    PUSHNULL
-  }>
-  $TokenExcesses$_constructor_query_id PROCINLINE:<{
-  }>
-  $SendParameters$_constructor_to_value_mode_body PROCINLINE:<{
-    TRUE
-    4 -ROLL
-    PUSHNULL
-    PUSHNULL
-  }>
-  $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address PROCINLINE:<{
+  $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid PROCINLINE:<{
   }>
   $DeployOk$_constructor_queryId PROCINLINE:<{
   }>
   $Tweetfi$_internal_binary_Mint PROCINLINE:<{
-    4 BLKDROP
-    3688 PUSHINT
-    s10 PUSH
-    THROWANYIFNOT
-    12241 PUSHINT
-    s13 s2 PUSH2
-    ADD
-    s4 PUSH
-    LEQ
-    THROWANYIFNOT
-    s1 s11 XCPU
-    666 PUSHINT
-    $Tweetfi$_fun_mint INLINECALLDICT
-  }>
-  $Tweetfi$_internal_text_fcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6 PROCINLINE:<{
-    3688 PUSHINT
-    s8 PUSH
-    THROWANYIFNOT
-    12241 PUSHINT
-    s11 PUSH
-    100 ADDCONST
-    s2 PUSH
-    LEQ
-    THROWANYIFNOT
-    __tact_context_get_sender INLINECALLDICT
-    100 PUSHINT
-    s11 PUSH
-    0 PUSHINT
-    $Tweetfi$_fun_mint INLINECALLDICT
-  }>
-  $Tweetfi$_internal_text_dc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0 PROCINLINE:<{
-    s7 POP
     __tact_context_get INLINECALLDICT
-    s2 s3 XCHG
-    3 BLKDROP
-    s9 PUSH
-    14534 PUSHINT
-    s0 s2 XCHG
-    __tact_slice_eq_bits INLINECALLDICT
+    NEWC
+    s7 PUSH
+    SHA256U
+    SWAP
+    256 STU
+    ENDC
+    0 PUSHINT
+    $global_emptySlice INLINECALLDICT
+    s5 PUSH
+    s3 s6 XCPU
+    s3 s13 XCPU
+    s3 s12 XCPU
+    $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid INLINECALLDICT
+    8610 PUSHINT
+    28 s() PUSH
+    17 s() PUSH
+    ADD
+    25 s() PUSH
+    LEQ
     THROWANYIFNOT
-    FALSE
-    s0 s7 XCHG
+    62211 PUSHINT
+    18 s() PUSH
+    17 s() PUSH
+    ADD
+    20 s() PUSH
+    LEQ
+    THROWANYIFNOT
+    30061 PUSHINT
+    27 s() PUSH
+    THROWANYIFNOT
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s13 s12 s11 XCHG3
+    16 s() 27 s() XCHG
+    s15 26 s() XCHG
+    s14 25 s() XCHG
+    s13 24 s() XCHG
+    s12 23 s() XCHG
+    s11 22 s() XCHG
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    $Tweetfi$_fun__merkel_mint_validate INLINECALLDICT
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    11 5 BLKSWAP
+    $Tweetfi$_fun__mint INLINECALLDICT
+  }>
+  $Tweetfi$_internal_text_e0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596 PROCINLINE:<{
+    __tact_context_get INLINECALLDICT
+    1000000000 PUSHINT
+    $global_emptyCell INLINECALLDICT
+    0 PUSHINT
+    $global_emptySlice INLINECALLDICT
+    s6 PUSH
+    s4 s7 XCPU
+    s4 s3 s4 XCHG3
+    PUSHNULL
+    $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid INLINECALLDICT
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s13 s12 s11 XCHG3
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    21 s() PUSH
+    $Tweetfi$_fun__mint_validate INLINECALLDICT
+    s10 21 s() XCHG
+    s9 20 s() XCHG
+    s8 19 s() XCHG
+    s7 18 s() XCHG
+    s6 17 s() XCHG
+    s5 16 s() XCHG
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s13 s12 s11 XCHG3
+    $Tweetfi$_fun__mint INLINECALLDICT
   }>
   $Tweetfi$_internal_binary_MerkleRoot PROCINLINE:<{
-    s2 POP
-    s6 POP
-    4329 PUSHINT
+    NIP
+    s5 POP
+    57166 PUSHINT
     __tact_context_get_sender INLINECALLDICT
-    s4 s(-1) PUXC
+    s3 s(-1) PUXC
     __tact_slice_eq_bits INLINECALLDICT
     THROWANYIFNOT
     54789 PUSHINT
     NOW
-    s0 s6 XCHG2
+    s0 s5 XCHG2
     SUB
-    s4 PUSH
+    s3 PUSH
     GREATER
-    s1 s5 XCHG
+    s1 s4 XCHG
     THROWANYIFNOT
     NOW
-    s0 s4 XCHG
-    s0 s5 XCHG
+    s0 s3 XCHG
     0 PUSHINT
-    SWAP
   }>
   $Tweetfi$_internal_binary_MerkleAdmin PROCINLINE:<{
-    11 -ROLL
-    $Tweetfi$_fun_requireOwner INLINECALLDICT
     s3 POP
-    s9 s10 XCHG
-    s8 s9 XCHG
-    s7 s8 XCHG
-    s6 s7 XCHG
-    s5 s6 XCHG
-    s4 s5 XCHG
-    s3 s4 XCHG
-    ROT
+    57166 PUSHINT
+    __tact_context_get_sender INLINECALLDICT
+    s10 s(-1) PUXC
+    __tact_slice_eq_bits INLINECALLDICT
+    THROWANYIFNOT
   }>
-  $Tweetfi$_internal_binary_MintSetting PROCINLINE:<{
-    s10 s12 XCHG
-    5 8 REVERSE
-    s7 s11 XCHG
-    s6 s12 XCHG
-    s5 s11 XCHG
+  $Tweetfi$_internal_binary_JettonBurnNotification PROCINLINE:<{
+    __tact_context_get INLINECALLDICT
+    s10 18 s() XCHG
+    s9 17 s() XCHG
+    s8 16 s() XCHG
+    s7 s15 XCHG
+    s6 s14 XCHG
+    s5 s13 XCHG
     s4 s12 XCHG
     s3 s11 XCHG
-    s12 s11 s12 XCHG3
-    $Tweetfi$_fun_requireOwner INLINECALLDICT
-    s2 POP
-    s3 POP
-    s8 s10 XCHG
-    s7 s9 XCHG
-    s6 s8 XCHG
-    s5 s7 XCHG
-    s4 s6 XCHG
-    s1 s3 XCHG
-    s1 s5 XCHG
-    s4 s4 s0 XCHG3
-  }>
-  $Tweetfi$_internal_binary_TokenUpdateContent PROCINLINE:<{
-    11 -ROLL
-    $Tweetfi$_fun_requireOwner INLINECALLDICT
-    s8 POP
-    s9 s10 XCHG
-    s8 s9 XCHG
-    7 ROLL
-  }>
-  $Tweetfi$_internal_binary_TokenBurnNotification PROCINLINE:<{
-    NIP
-    DUP
-    __tact_not_null INLINECALLDICT
-    s11 s14 XCHG
-    s10 s13 XCHG
-    s9 s12 XCHG
-    s8 s14 XCHG
-    s7 s13 XCHG
-    s6 s12 XCHG
-    s5 s14 XCHG
-    s4 s13 XCHG
-    s3 s12 XCHG
-    s14 s13 s0 XCHG3
-    $Tweetfi$_fun_requireSenderAsWalletOwner INLINECALLDICT
-    s10 s13 XCHG2
-    SUB
+    s2 18 s() XCHG
+    s1 17 s() XCHG
+    s0 16 s() XCHG
     s11 PUSH
-    ISNULL
-    NOT
-    IF:<{
-      s0 s11 XCHG
-      __tact_not_null INLINECALLDICT
-      0 PUSHINT
-      FALSE
-      64 PUSHINT
-      s0 s13 XCHG
-      $TokenExcesses$_constructor_query_id INLINECALLDICT
-      $TokenExcesses$_store_cell INLINECALLDICT
-      s3 s4 XCHG
-      s1 s3 s0 XCHG3
-      s1 s13 XCHG
-      $SendParameters$_constructor_to_value_bounce_mode_body INLINECALLDICT
-      $global_send INLINECALLDICT
-      s8 s9 XCHG
-    }>ELSE<{
-      s10 POP
-      s10 POP
-    }>
-    s8 s10 XCHG
-    s6 s9 XCHG
-    s5 s8 XCHG
-    s4 s7 XCHG
-    s3 s6 XCHG
-    s5 s1 s3 XCHG3
-    s4 s2 XCHG2
-  }>
-  $Tweetfi$_internal_binary_ProvideWalletAddress PROCINLINE:<{
-    23951 PUSHINT
-    __tact_context_get INLINECALLDICT
-    $Context$_get_value INLINECALLDICT
-    6100000 PUSHINT
-    GEQ
-    THROWANYIFNOT
-    __tact_context_sys GETGLOB
-    MYADDR
-    s3 s(-1) PUXC
-    $JettonDefaultWallet$_init_child INLINECALLDICT
-    s0 s2 XCHG
-    IF:<{
-      __tact_context_get_sender INLINECALLDICT
-      0 PUSHINT
-      s0 s2 XCHG
-      64 PUSHINT
-      s0 s4 XCHG
-      $global_contractAddress INLINECALLDICT
-      NEWC
-      TRUE
-      __tact_store_bool INLINECALLDICT
-      s0 s5 XCHG2
-      __tact_store_address INLINECALLDICT
-      ENDC
-      $Cell$_fun_asSlice INLINECALLDICT
-      s5 s4 s0 XCHG3
-      $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address INLINECALLDICT
-      $TakeWalletAddress$_store_cell INLINECALLDICT
-      s2 s3 XCHG
-      $SendParameters$_constructor_to_value_mode_body INLINECALLDICT
-      $global_send INLINECALLDICT
-    }>ELSE<{
-      s2 POP
-      __tact_context_get_sender INLINECALLDICT
-      0 PUSHINT
-      s0 s3 XCHG
-      64 PUSHINT
-      s0 s3 XCHG
-      $global_contractAddress INLINECALLDICT
-      NEWC
-      FALSE
-      __tact_store_bool INLINECALLDICT
-      ENDC
-      $Cell$_fun_asSlice INLINECALLDICT
-      s2 s5 XCHG
-      $TakeWalletAddress$_constructor_query_id_wallet_address_owner_address INLINECALLDICT
-      $TakeWalletAddress$_store_cell INLINECALLDICT
-      $SendParameters$_constructor_to_value_mode_body INLINECALLDICT
-      $global_send INLINECALLDICT
-    }>
+    19 s() PUSH
+    19 s() PUSH
+    19 s() PUSH
+    19 s() PUSH
+    19 s() PUSH
+    19 s() PUSH
+    19 s() PUSH
+    $Tweetfi$_fun__burn_notification_validate INLINECALLDICT
+    s10 18 s() XCHG
+    s9 17 s() XCHG
+    s8 16 s() XCHG
+    8 8 BLKSWAP
+    4 4 BLKSWAP
+    $Tweetfi$_fun__burn_notification INLINECALLDICT
   }>
   $Tweetfi$_internal_binary_Deploy PROCINLINE:<{
     $DeployOk$_constructor_queryId INLINECALLDICT
     $DeployOk$_store_cell INLINECALLDICT
     $Tweetfi$_fun_notify INLINECALLDICT
+  }>
+  %testmint PROC:<{
+    $Mint$_from_tuple INLINECALLDICT
+    $Tweetfi$_contract_load INLINECALLDICT
+    s10 16 s() XCHG
+    s9 s15 XCHG
+    s8 s14 XCHG
+    s7 s13 XCHG
+    s6 s12 XCHG
+    6 6 BLKSWAP
+    5 ROLL
+    $Tweetfi$_fun_testmint INLINECALLDICT
+    11 1 BLKDROP2
   }>
   %max_supply PROC:<{
     $Tweetfi$_contract_load INLINECALLDICT
@@ -1214,21 +1353,14 @@ PROGRAM{
     $Tweetfi$_fun_get_wallet_address INLINECALLDICT
     11 1 BLKDROP2
   }>
-  %owner PROC:<{
-    $Tweetfi$_contract_load INLINECALLDICT
-    $Tweetfi$_fun_owner INLINECALLDICT
-    11 1 BLKDROP2
-  }>
   supported_interfaces PROC:<{
     123515602279859691144772641439386770278 PUSHINT
     209801025412363888721030803524359905849 PUSHINT
     42980537499636128163026532310500881091 PUSHINT
     209474421377847335869795010607481022628 PUSHINT
-    258390863389042349688353801369539695109 PUSHINT
-    86142586315491086060343270784266291122 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d6145485333576455573946757548324b724b7231366568764870386a51545335513255673370463273543170} PUSHSLICE
+    x{697066733a2f2f516d4e7a636b4d74795066725031536637423967773837736f77336a38673154517655364e457862466863765241} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1254,7 +1386,7 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    4031658166 PUSHINT
+    3991647442 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
@@ -1284,43 +1416,13 @@ PROGRAM{
       TRUE
     }>
     DUP
-    392978134 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $MintSetting$_load INLINECALLDICT
-      1 2 BLKDROP2
-      $Tweetfi$_internal_binary_MintSetting INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    2937889386 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $TokenUpdateContent$_load INLINECALLDICT
-      NIP
-      $Tweetfi$_internal_binary_TokenUpdateContent INLINECALLDICT
-      TRUE
-    }>
-    DUP
     2078119902 PUSHINT
     EQUAL
     IFJMP:<{
       DROP
-      $TokenBurnNotification$_load INLINECALLDICT
+      $JettonBurnNotification$_load INLINECALLDICT
       1 4 BLKDROP2
-      $Tweetfi$_internal_binary_TokenBurnNotification INLINECALLDICT
-      TRUE
-    }>
-    DUP
-    745978227 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ProvideWalletAddress$_load INLINECALLDICT
-      1 3 BLKDROP2
-      $Tweetfi$_internal_binary_ProvideWalletAddress INLINECALLDICT
+      $Tweetfi$_internal_binary_JettonBurnNotification INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1336,19 +1438,10 @@ PROGRAM{
     0 EQINT
     IF:<{
       HASHSU
-      DUP
-      114319820043338273756724545349405963582647504019519623841762688061413941636854 PUSHINT
+      101764636280370598715105654011285498216663292226339877569534229894954413987222 PUSHINT
       EQUAL
       IFJMP:<{
-        DROP
-        $Tweetfi$_internal_text_fcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6 INLINECALLDICT
-        TRUE
-        RETALT
-      }>
-      99509353686795994580079343596348776708726008258819386693306414918577339272096 PUSHINT
-      EQUAL
-      IFJMP:<{
-        $Tweetfi$_internal_text_dc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0 INLINECALLDICT
+        $Tweetfi$_internal_text_e0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596 INLINECALLDICT
         TRUE
         RETALT
       }>

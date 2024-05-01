@@ -10,174 +10,207 @@
 ;; Contract Tweetfi functions
 ;;
 
-(int, slice, cell, int, (slice, int, int, slice, int, int), int) $Tweetfi$_contract_init(cell $content, int $max_supply, (slice, int, int, slice, int, int) $claim_info) impure inline_ref {
-    var (($claim_info'merkle_root, $claim_info'set_at, $claim_info'set_interval, $claim_info'admin, $claim_info'max_mint_today, $claim_info'minted_today)) = $claim_info;
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = (null(), null(), null(), null(), null(), null());
-    $self'total_supply = 0;
-    $self'owner = __tact_context_get_sender();
-    $self'mintable = true;
-    $self'content = $content;
+(int, int, slice, cell, int, (slice, int, int, slice, int, int)) $Tweetfi$_contract_init(slice $owner, cell $jetton_content, int $max_supply, (slice, int, int, slice, int, int) $mint_config) impure inline_ref {
+    var (($mint_config'merkle_root, $mint_config'set_at, $mint_config'set_interval, $mint_config'admin, $mint_config'max_mint_today, $mint_config'minted_today)) = $mint_config;
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = (0, true, null(), null(), null(), null());
+    $self'owner = $owner;
+    $self'jetton_content = $jetton_content;
     $self'max_supply = $max_supply;
-    ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today) = ($claim_info'merkle_root, $claim_info'set_at, $claim_info'set_interval, $claim_info'admin, $claim_info'max_mint_today, $claim_info'minted_today);
-    return ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply);
+    ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today) = ($mint_config'merkle_root, $mint_config'set_at, $mint_config'set_interval, $mint_config'admin, $mint_config'max_mint_today, $mint_config'minted_today);
+    return ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today));
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), int) $Tweetfi$_fun_max_supply((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $self'max_supply);
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), slice) $Tweetfi$_fun__sha128((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $s) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), __tact_int_to_string((string_hash($s) >> 128)));
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), (cell, cell)) $Tweetfi$_fun_getJettonWalletInit((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $address) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $JettonDefaultWallet$_init_child(__tact_context_sys, $address, my_address()));
-}
-
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_mint((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $to, int $amount, slice $response_destination, int $current_hash) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    throw_unless(18668, $self'mintable);
-    $self'total_supply = ($self'total_supply + $amount);
-    slice $forward_payload = $Cell$_fun_asSlice(end_cell(begin_cell()));
-    if (($current_hash != 0)) {
-        $forward_payload = $Cell$_fun_asSlice(end_cell(store_uint(begin_cell(), $current_hash, 256)));
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_verify_proof((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $target_hash, cell $proof, int $proof_length) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    slice $current_hash = $target_hash;
+    int $frist_cell = true;
+    slice $parser = begin_parse($proof);
+    repeat ($proof_length) {
+        if ((~ $frist_cell)) {
+            if ((~ slice_refs_empty?($parser))) {
+                $parser = begin_parse($parser~load_ref());
+            }
+        }
+        int $_hash = $parser~load_uint(128);
+        int $_position = $parser~load_uint(1);
+        tuple $sb = __tact_string_builder_start_string();
+        if (($_position == 0)) {
+            $sb~__tact_string_builder_append(__tact_int_to_string($_hash));
+            $sb~__tact_string_builder_append($current_hash);
+        } else {
+            $sb~__tact_string_builder_append($current_hash);
+            $sb~__tact_string_builder_append(__tact_int_to_string($_hash));
+        }
+        $current_hash = ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__sha128(__tact_string_builder_end_slice($sb));
+        $frist_cell = false;
     }
-    var ($winit'code, $winit'data) = ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_getJettonWalletInit($to);
-    $global_send($SendParameters$_constructor_to_value_bounce_mode_body_code_data($global_contractAddress(($winit'code, $winit'data)), 0, true, 64, $TokenTransferInternal$_store_cell($TokenTransferInternal$_constructor_query_id_amount_from_response_destination_forward_ton_amount_forward_payload(0, $amount, my_address(), $response_destination, 0, $forward_payload)), $winit'code, $winit'data));
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), __tact_slice_eq($self'mint_config'merkle_root, $current_hash));
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_requireSenderAsWalletOwner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $owner) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_testmint((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice, int, slice, slice, int, cell) $msg) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($msg'receiver, $msg'amount, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof)) = $msg;
+    tuple $sb = __tact_string_builder_start_string();
+    $sb~__tact_string_builder_append($msg'txid);
+    $sb~__tact_string_builder_append($msg'receiver_str);
+    $sb~__tact_string_builder_append(__tact_int_to_string($msg'amount));
+    slice $current_hash = ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__sha128(__tact_string_builder_end_slice($sb));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_verify_proof($current_hash, $msg'proof, $msg'proof_length));
+}
+
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_fun_max_supply((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), $self'max_supply);
+}
+
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__merkel_mint_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice, int, slice, slice, int, cell) $msg) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($msg'receiver, $msg'amount, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof)) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    var ($winit'code, $winit'data) = ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_getJettonWalletInit($owner);
-    throw_unless(4429, ( __tact_slice_eq_bits($ctx'sender, $global_contractAddress(($winit'code, $winit'data))) ));
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    tuple $sb = __tact_string_builder_start_string();
+    $sb~__tact_string_builder_append($msg'txid);
+    $sb~__tact_string_builder_append($msg'receiver_str);
+    $sb~__tact_string_builder_append(__tact_int_to_string($msg'amount));
+    slice $tx_str = __tact_string_builder_end_slice($sb);
+    throw_unless(32067, (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_verify_proof(($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__sha128($tx_str), $msg'proof, $msg'proof_length) == true));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), (int, int, slice, cell, cell)) $Tweetfi$_fun_get_jetton_data((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $JettonData$_constructor_total_supply_mintable_owner_content_wallet_code($self'total_supply, $self'mintable, $self'owner, $self'content, $StateInit$_get_code($JettonDefaultWallet$_init_child(__tact_context_sys, $self'owner, my_address()))));
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), (cell, cell)) $Tweetfi$_fun_calculate_jetton_wallet_init((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $owner_address) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), $TweetfiWallet$_init_child(__tact_context_sys, $owner_address, my_address()));
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), slice) $Tweetfi$_fun_get_wallet_address((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, slice $owner) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $global_contractAddress($JettonDefaultWallet$_init_child(__tact_context_sys, $owner, my_address())));
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__mint((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (slice, slice, int, cell, int, slice, slice) $msg) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
+    var (($msg'origin, $msg'receiver, $msg'amount, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid)) = $msg;
+    var ($initCode'code, $initCode'data) = ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_calculate_jetton_wallet_init($msg'receiver);
+    $self'total_supply = ($self'total_supply + $msg'amount);
+    if (null?($msg'txid)) {
+        $global_send($SendParameters$_constructor_to_value_bounce_mode_body_code_data($global_contractAddress(($initCode'code, $initCode'data)), 0, true, 64, $JettonInternalTransfer$_store_cell($JettonInternalTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload(0, $msg'amount, $msg'origin, my_address(), $msg'forward_ton_amount, $msg'forward_payload)), $initCode'code, $initCode'data));
+    } else {
+        $global_send($SendParameters$_constructor_to_value_bounce_mode_body_code_data($global_contractAddress(($initCode'code, $initCode'data)), 0, true, 64, $ClaimTransfer$_store_cell($ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid(0, $msg'amount, $msg'origin, my_address(), $msg'forward_ton_amount, $msg'forward_payload, __tact_not_null($msg'txid))), $initCode'code, $initCode'data));
+    }
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_fun_requireOwner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    throw_unless(132, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__mint_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (slice, slice, int, cell, int, slice, slice) $msg) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
+    var (($msg'origin, $msg'receiver, $msg'amount, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid)) = $msg;
+    throw_unless(43365, ( __tact_slice_eq_bits($self'owner, $ctx'sender) ));
+    throw_unless(30061, $self'mintable);
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), slice) $Tweetfi$_fun_owner((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline_ref {
-    var (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)) = $self;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), $self'owner);
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__burn_notification_validate((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice) $msg) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
+    var (($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination)) = $msg;
+    var ($initCode'code, $initCode'data) = ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_calculate_jetton_wallet_init($msg'sender);
+    throw_unless(9739, ( __tact_slice_eq_bits($global_contractAddress(($initCode'code, $initCode'data)), $ctx'sender) ));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
+}
+
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_fun__burn_notification((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, slice, int, slice) $ctx, (int, int, slice, slice) $msg) impure inline {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var (($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw)) = $ctx;
+    var (($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination)) = $msg;
+    $self'total_supply = ($self'total_supply - $msg'amount);
+    if (( ~ __tact_slice_eq_bits(__tact_create_address(0, 0), $msg'response_destination) )) {
+        $global_send($SendParameters$_constructor_to_value_bounce_mode($msg'response_destination, 0, false, (64 + 2)));
+    }
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
+}
+
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), (int, int, slice, cell, cell)) $Tweetfi$_fun_get_jetton_data((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), $JettonData$_constructor_total_supply_mintable_admin_address_jetton_content_jetton_wallet_code($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $StateInit$_get_code(($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_calculate_jetton_wallet_init(my_address()))));
+}
+
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), slice) $Tweetfi$_fun_get_wallet_address((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, slice $owner_address) impure inline_ref {
+    var (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))) = $self;
+    var ($initCode'code, $initCode'data) = ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_calculate_jetton_wallet_init($owner_address);
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), $global_contractAddress(($initCode'code, $initCode'data)));
 }
 
 ;;
 ;; Receivers of a Contract Tweetfi
 ;;
 
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_Mint((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (int, slice, slice, slice, int, cell) $msg) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
-    var ($msg'amount, $msg'receiver, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof) = $msg;
-    throw_unless(3688, $self'mintable);
-    throw_unless(12241, (($self'total_supply + $msg'amount) <= $self'max_supply));
-    tuple $sb = __tact_string_builder_start_string();
-    $sb~__tact_string_builder_append($msg'txid);
-    $sb~__tact_string_builder_append($msg'receiver_str);
-    $sb~__tact_string_builder_append(__tact_int_to_string($msg'amount));
-    int $current_hash = string_hash(__tact_string_builder_end_slice($sb));
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_mint($msg'receiver, $msg'amount, $self'owner, 666);
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
-}
-
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_internal_text_fcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
-    throw_unless(3688, $self'mintable);
-    throw_unless(12241, (($self'total_supply + 100) <= $self'max_supply));
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_mint(__tact_context_get_sender(), 100, $self'owner, 0);
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
-}
-
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), ()) $Tweetfi$_internal_text_dc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
+(((int, int, slice, cell, int, (slice, int, int, slice, int, int))), ()) $Tweetfi$_internal_binary_Mint((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice, int, slice, slice, int, cell) $msg) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
+    var ($msg'receiver, $msg'amount, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    throw_unless(14534, ( __tact_slice_eq_bits($self'owner, $ctx'sender) ));
-    $self'mintable = false;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    var ($_msg'origin, $_msg'receiver, $_msg'amount, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload, $_msg'txid) = $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid($ctx'sender, $ctx'sender, $msg'amount, end_cell(store_uint(begin_cell(), string_hash($msg'txid), 256)), 0, $global_emptySlice(), $msg'txid);
+    throw_unless(8610, (($self'total_supply + $msg'amount) <= $self'max_supply));
+    throw_unless(62211, (($self'mint_config'minted_today + $msg'amount) <= $self'mint_config'max_mint_today));
+    throw_unless(30061, $self'mintable);
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__merkel_mint_validate($Mint$_tensor_cast(($msg'receiver, $msg'amount, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof)));
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__mint(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'origin, $_msg'receiver, $_msg'amount, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload, $_msg'txid));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_MerkleRoot((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (slice) $merkle_root) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), ()) $Tweetfi$_internal_text_e0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    var ($msg'origin, $msg'receiver, $msg'amount, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid) = $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid($ctx'sender, $ctx'sender, 1000000000, $global_emptyCell(), 0, $global_emptySlice(), null());
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__mint_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'origin, $msg'receiver, $msg'amount, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid));
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__mint(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'origin, $msg'receiver, $msg'amount, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
+}
+
+(((int, int, slice, cell, int, (slice, int, int, slice, int, int))), ()) $Tweetfi$_internal_binary_MerkleRoot((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice) $merkle_root) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
     var ($merkle_root'value) = $merkle_root;
-    throw_unless(4329, ( __tact_slice_eq_bits($self'claim_info'admin, __tact_context_get_sender()) ));
-    throw_unless(54789, ((now() - $self'claim_info'set_at) > $self'claim_info'set_interval));
-    $self'claim_info'merkle_root = $merkle_root'value;
-    $self'claim_info'set_at = now();
-    $self'claim_info'minted_today = 0;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    throw_unless(57166, ( __tact_slice_eq_bits($self'mint_config'admin, __tact_context_get_sender()) ));
+    throw_unless(54789, ((now() - $self'mint_config'set_at) > $self'mint_config'set_interval));
+    $self'mint_config'merkle_root = $merkle_root'value;
+    $self'mint_config'set_at = now();
+    $self'mint_config'minted_today = 0;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_MerkleAdmin((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (slice) $merkle_admin) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
+(((int, int, slice, cell, int, (slice, int, int, slice, int, int))), ()) $Tweetfi$_internal_binary_MerkleAdmin((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (slice) $merkle_admin) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
     var ($merkle_admin'admin) = $merkle_admin;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_requireOwner();
-    $self'claim_info'admin = $merkle_admin'admin;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    throw_unless(57166, ( __tact_slice_eq_bits($self'owner, __tact_context_get_sender()) ));
+    $self'mint_config'admin = $merkle_admin'admin;
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_MintSetting((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (int, int) $settings) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
-    var ($settings'set_interval, $settings'max_mint_today) = $settings;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_requireOwner();
-    $self'claim_info'set_interval = $settings'set_interval;
-    $self'claim_info'max_mint_today = $settings'max_mint_today;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
-}
-
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_TokenUpdateContent((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (cell) $msg) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
-    var ($msg'content) = $msg;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_requireOwner();
-    $self'content = $msg'content;
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
-}
-
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_TokenBurnNotification((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (int, int, slice, slice) $msg) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
+(((int, int, slice, cell, int, (slice, int, int, slice, int, int))), ()) $Tweetfi$_internal_binary_JettonBurnNotification((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int, int, slice, slice) $msg) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
     var ($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination) = $msg;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_requireSenderAsWalletOwner(__tact_not_null($msg'response_destination));
-    $self'total_supply = ($self'total_supply - $msg'amount);
-    if ((~ null?($msg'response_destination))) {
-        $global_send($SendParameters$_constructor_to_value_bounce_mode_body(__tact_not_null($msg'response_destination), 0, false, 64, $TokenExcesses$_store_cell($TokenExcesses$_constructor_query_id($msg'query_id))));
-    }
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__burn_notification_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination));
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun__burn_notification(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'sender, $msg'response_destination));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_ProvideWalletAddress((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (int, slice, int) $msg) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
-    var ($msg'query_id, $msg'owner_address, $msg'include_address) = $msg;
-    throw_unless(23951, ($Context$_get_value(__tact_context_get()) >= 6100000));
-    var ($init'code, $init'data) = $JettonDefaultWallet$_init_child(__tact_context_sys, $msg'owner_address, my_address());
-    if ($msg'include_address) {
-        $global_send($SendParameters$_constructor_to_value_mode_body(__tact_context_get_sender(), 0, 64, $TakeWalletAddress$_store_cell($TakeWalletAddress$_constructor_query_id_wallet_address_owner_address($msg'query_id, $global_contractAddress(($init'code, $init'data)), $Cell$_fun_asSlice(end_cell(__tact_store_address(__tact_store_bool(begin_cell(), true), $msg'owner_address)))))));
-    } else {
-        $global_send($SendParameters$_constructor_to_value_mode_body(__tact_context_get_sender(), 0, 64, $TakeWalletAddress$_store_cell($TakeWalletAddress$_constructor_query_id_wallet_address_owner_address($msg'query_id, $global_contractAddress(($init'code, $init'data)), $Cell$_fun_asSlice(end_cell(__tact_store_bool(begin_cell(), false)))))));
-    }
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
-}
-
-(((int, slice, cell, int, (slice, int, int, slice, int, int), int)), ()) $Tweetfi$_internal_binary_Deploy((int, slice, cell, int, (slice, int, int, slice, int, int), int) $self, (int) $deploy) impure inline {
-    var ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply) = $self;
+(((int, int, slice, cell, int, (slice, int, int, slice, int, int))), ()) $Tweetfi$_internal_binary_Deploy((int, int, slice, cell, int, (slice, int, int, slice, int, int)) $self, (int) $deploy) impure inline {
+    var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
     var ($deploy'queryId) = $deploy;
-    ($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply)~$Tweetfi$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
-    return (($self'total_supply, $self'owner, $self'content, $self'mintable, ($self'claim_info'merkle_root, $self'claim_info'set_at, $self'claim_info'set_interval, $self'claim_info'admin, $self'claim_info'max_mint_today, $self'claim_info'minted_today), $self'max_supply), ());
+    ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today))~$Tweetfi$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId)));
+    return (($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)), ());
 }
 
 ;;
 ;; Get methods of a Contract Tweetfi
 ;;
+
+_ %testmint(tuple $$msg) method_id(72120) {
+    (slice, int, slice, slice, int, cell) $msg = $Mint$_from_tuple($$msg);
+    var self = $Tweetfi$_contract_load();
+    var res = self~$Tweetfi$_fun_testmint($msg);
+    return res;
+}
 
 _ %max_supply() method_id(102571) {
     var self = $Tweetfi$_contract_load();
@@ -191,16 +224,10 @@ _ %get_jetton_data() method_id(106029) {
     return $JettonData$_to_external(res);
 }
 
-_ %get_wallet_address(slice $$owner) method_id(103289) {
-    slice $owner = __tact_verify_address($$owner);
+_ %get_wallet_address(slice $$owner_address) method_id(103289) {
+    slice $owner_address = __tact_verify_address($$owner_address);
     var self = $Tweetfi$_contract_load();
-    var res = self~$Tweetfi$_fun_get_wallet_address($owner);
-    return res;
-}
-
-_ %owner() method_id(83229) {
-    var self = $Tweetfi$_contract_load();
-    var res = self~$Tweetfi$_fun_owner();
+    var res = self~$Tweetfi$_fun_get_wallet_address($owner_address);
     return res;
 }
 
@@ -209,14 +236,12 @@ _ supported_interfaces() method_id {
         "org.ton.introspection.v0"H >> 128,
         "org.ton.abi.ipfs.v0"H >> 128,
         "org.ton.deploy.lazy.v0"H >> 128,
-        "org.ton.chain.workchain.v0"H >> 128,
-        "org.ton.jetton.master"H >> 128,
-        "org.ton.ownable"H >> 128
+        "org.ton.chain.workchain.v0"H >> 128
     );
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmaEHS3WdUW9FuuH2KrKr16ehvHp8jQTS5Q2Ug3pF2sT1p";
+    return "ipfs://QmNzckMtyPfrP1Sf7B9gw87sow3j8g1TQvU6NExbFhcvRA";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -227,7 +252,7 @@ _ lazy_deployment_completed() method_id {
 ;; Routing of a Contract Tweetfi
 ;;
 
-((int, slice, cell, int, (slice, int, int, slice, int, int), int), int) $Tweetfi$_contract_router_internal((int, slice, cell, int, (slice, int, int, slice, int, int), int) self, int msg_bounced, slice in_msg) impure inline_ref {
+((int, int, slice, cell, int, (slice, int, int, slice, int, int)), int) $Tweetfi$_contract_router_internal((int, int, slice, cell, int, (slice, int, int, slice, int, int)) self, int msg_bounced, slice in_msg) impure inline_ref {
     ;; Handle bounced messages
     if (msg_bounced) {
         return (self, true);
@@ -241,7 +266,7 @@ _ lazy_deployment_completed() method_id {
     
     
     ;; Receive Mint message
-    if (op == 4031658166) {
+    if (op == 3991647442) {
         var msg = in_msg~$Mint$_load();
         self~$Tweetfi$_internal_binary_Mint(msg);
         return (self, true);
@@ -261,31 +286,10 @@ _ lazy_deployment_completed() method_id {
         return (self, true);
     }
     
-    ;; Receive MintSetting message
-    if (op == 392978134) {
-        var msg = in_msg~$MintSetting$_load();
-        self~$Tweetfi$_internal_binary_MintSetting(msg);
-        return (self, true);
-    }
-    
-    ;; Receive TokenUpdateContent message
-    if (op == 2937889386) {
-        var msg = in_msg~$TokenUpdateContent$_load();
-        self~$Tweetfi$_internal_binary_TokenUpdateContent(msg);
-        return (self, true);
-    }
-    
-    ;; Receive TokenBurnNotification message
+    ;; Receive JettonBurnNotification message
     if (op == 2078119902) {
-        var msg = in_msg~$TokenBurnNotification$_load();
-        self~$Tweetfi$_internal_binary_TokenBurnNotification(msg);
-        return (self, true);
-    }
-    
-    ;; Receive ProvideWalletAddress message
-    if (op == 745978227) {
-        var msg = in_msg~$ProvideWalletAddress$_load();
-        self~$Tweetfi$_internal_binary_ProvideWalletAddress(msg);
+        var msg = in_msg~$JettonBurnNotification$_load();
+        self~$Tweetfi$_internal_binary_JettonBurnNotification(msg);
         return (self, true);
     }
     
@@ -300,15 +304,9 @@ _ lazy_deployment_completed() method_id {
     if (op == 0) {
         var text_op = slice_hash(in_msg);
         
-        ;; Receive "Mint: 100" message
-        if (text_op == 0xfcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6) {
-            self~$Tweetfi$_internal_text_fcbeb9a480966477480639c7cea4a578aa6a113b2903b26d01bc384663eceef6();
-            return (self, true);
-        }
-        
-        ;; Receive "Owner: MintClose" message
-        if (text_op == 0xdc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0) {
-            self~$Tweetfi$_internal_text_dc004c5b75be74376bd79df8713f2390620cc8a3095068b0583eb28ca3ac8ba0();
+        ;; Receive "Mint:1" message
+        if (text_op == 0xe0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596) {
+            self~$Tweetfi$_internal_text_e0fcbe3422dd4e5d29490ee50319be4ee4095922f0443f72ca03692576b81596();
             return (self, true);
         }
     }

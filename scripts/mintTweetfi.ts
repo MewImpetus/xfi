@@ -5,58 +5,63 @@ import { NetworkProvider } from '@ton/blueprint';
 export async function run(provider: NetworkProvider, args: string[]) {
     const ui = provider.ui();
 
-    const address = Address.parse("EQC1w4R9Bz3SLn7Jdnt8xKIbQxxGePQs63WnlM0v-mowGMMI");
+    const address = Address.parse("EQBTmYcJQVHGEQ5BhV_SjnZL4rGnebA11dQtAJQQhnc4s5mM");
 
 
     const hub = provider.open(Tweetfi.fromAddress(address));
 
 
-    // await hub.send(
-    //     provider.sender(),
-    //     {
-    //         value: toNano('0.05'),
-    //     },
-    //     "Mint: 100"
-    // );
-
 
 
     let cell2: Cell = beginCell()
-    .storeUint(46248862118385798773055515178124195033433472036846087530465803139634289864007n, 256)
+    .storeUint(172282571249944562391355093940656328312n, 128)
     .storeUint(1, 1).endCell();
 
     let cell1: Cell = beginCell().storeRef(cell2)
-    .storeUint(49321590554534533049099385644279491224900104974179533593752405396217931868711n, 256)
+    .storeUint(144943127676063095663117939959419744222n, 128)
     .storeUint(1, 1).endCell();
     
     
 
-    // let counterBefore = await hub.getMintinfo( {
-    //     $$type: "Proof",
+    // let res = await hub.getTestmint( {
+    //     $$type: "Mint",
+    //     amount: toNano(10000),
+    //     receiver: Address.parse("UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs"),
+    //     receiver_str: "UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs",
+    //     txid: "123",
+    //     proof_length: BigInt(2),
     //     proof: cell1
     // });
 
-    // console.log(`a:${counterBefore}`)
-    
+    // console.log(`a:${res}`)
 
     await hub.send(
         provider.sender(),
         {
-            value: toNano('0.05'),
+            value: toNano('0.5'),
         },
-        {
-            $$type: "Mint",
-            amount: toNano(10000),
-            receiver: Address.parse("UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs"),
-            receiver_str: "UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs",
-            txid: "123",
-            proof_length: BigInt(2),
-            proof: cell1
-        }
+        "Mint:1"
     )
+    
+
+    // await hub.send(
+    //     provider.sender(),
+    //     {
+    //         value: toNano('1'),
+    //     },
+    //     {
+    //         $$type: "Mint",
+    //         amount: toNano(10000),
+    //         receiver: Address.parse("UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs"),
+    //         receiver_str: "UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs",
+    //         txid: "123",
+    //         proof_length: BigInt(2),
+    //         proof: cell1
+    //     }
+    // )
 
     
     ui.write('Waiting for send...');
 
-    // ui.write('successfully!');
+    ui.write('successfully!');
 }

@@ -1,13 +1,24 @@
 import "@stdlib/deploy";
-import "./jetton";
+import "./JettonMaster";
+import "./JettonWallet";
 
-message Mint {
-    amount: Int;
-    receiver: Address;
-    receiver_str: String;
-    txid: String;
+
+message  Mint {
+    receiver: Address;      // address of receiver
+    amount: Int;            // amount of jettons to mint
+    receiver_str: String;  // the str(receiver address)
+    txid: String; // the reward tx id
     proof_length: Int as uint8;
     proof: Cell;
+}
+
+struct MintConfig {
+    merkle_root : String;
+    set_at : Int as uint32 = 0;
+    set_interval: Int as uint32 = 24 * 3600;
+    admin : Address;
+    max_mint_today : Int as uint64;  // Maximum mintable today
+    minted_today : Int as uint64;   // minted amount today
 }
 
 message MerkleRoot {
@@ -18,113 +29,205 @@ message MerkleAdmin {
     admin: Address;
 }
 
-message MintSetting {
-    set_interval: Int as uint32;
-    max_mint_today: Int as uint64;
-}
-
-struct ClaimInfo {
-    merkle_root : String;
-    set_at : Int as uint32 = 0;
-    set_interval: Int as uint32 = 24 * 3600;
-    admin : Address;
-    max_mint_today : Int as uint64;  // Maximum mintable today
-    minted_today : Int as uint64;   // minted amount today
+message Tip {
+    query_id: Int as uint64;                
+    amount: Int as coins;                   
+    destination: Address;                   
+    response_destination: Address;          
+    custom_payload: Cell?;                  
+    forward_ton_amount: Int as coins;       
+    forward_payload: Slice as remaining;    
 }
 
 
-contract Tweetfi with Jetton, Deployable {
-    total_supply: Int as coins;
+
+contract TweetfiWallet with JettonWallet {
+    balance: Int as coins = 0;
+    illiquid_balance: Int as coins = 0;
     owner: Address;
-    content: Cell;
-    mintable: Bool;
-    claim_info: ClaimInfo;
+    jetton_master: Address;
+    claimed: map<Int, Bool>;
 
-    max_supply: Int as coins; // Extract parameter we set here. The Jetton Standards doesn't have this parameter.
+    init(owner: Address, jetton_master: Address) {
+        self.owner = owner;
+        self.jetton_master = jetton_master;
+    }
 
-    init(content: Cell, max_supply: Int, claim_info: ClaimInfo) {
-        self.total_supply = 0;
-        self.owner = sender();
-        self.mintable = true;
-        self.content = content;
-        self.max_supply = max_supply;
-        self.claim_info = claim_info;
+  
+
+    receive(msg: Tip) {
+
+        let ctx: Context = context();
+        self.illiquid_balance = self.illiquid_balance - msg.amount;
+        require(self.illiquid_balance >= 0, "JettonWallet: Not enough illiquid jettons to transfer");
+        // 90% to the destination
+        let burn_amount : Int = msg.amount / 10;
+        require(msg.amount - burn_amount > 0, "JettonWallet: Not enough jettons to burn");
+        let _msg: JettonTransfer = JettonTransfer {
+                query_id: msg.query_id,
+                amount: msg.amount - burn_amount,
+                destination: msg.destination,
+                response_destination: msg.response_destination,
+                custom_payload: msg.custom_payload,
+                forward_ton_amount: msg.forward_ton_amount,
+                forward_payload: msg.forward_payload
+        };
+        self._transfer_validate(ctx, _msg);
+        self._transfer_estimate_remain_value(ctx, _msg);
+        // require(ctx.sender != msg.target, "Cannot tip oneself");
+        // 90% transfer
+        self._transfer_jetton(ctx, _msg);
+        // 10% to burning
+        self._burn_tokens(ctx, JettonBurn {
+                    query_id: msg.query_id,        
+                    amount: burn_amount,           
+                    response_destination: msg.response_destination,
+                    custom_payload: msg.custom_payload
+        });
     }
 
 
-    receive(msg: Mint) { // 0xfc708bd2
-        require(self.mintable, "Not mintable");
-        require(self.total_supply + msg.amount <= self.max_supply, "Max supply exceeded");
+   
+
+    get fun get_illiquid_balance(): String {
+        return self.illiquid_balance.toString();
+    }
+
+    override inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit {
+        return initOf TweetfiWallet(owner_address, self.jetton_master);
+    }
+
+
+}
+
+contract Tweetfi with JettonMaster, Deployable {
+    total_supply: Int as coins = 0;
+    mintable: Bool = true;
+    owner: Address;
+    jetton_content: Cell;
+
+    max_supply: Int as coins;
+    mint_config: MintConfig;
+
+    init(owner: Address, jetton_content: Cell, max_supply: Int, mint_config: MintConfig){
+        self.owner = owner;
+        self.jetton_content = jetton_content;  
+        self.max_supply = max_supply;
+        self.mint_config = mint_config;
+    }
+
+
+    // Just for test TODO remove 
+    get fun testmint(msg: Mint) : Bool {
         let sb: StringBuilder = beginString();
         sb.append(msg.txid);
         sb.append(msg.receiver_str);
         sb.append(msg.amount.toString());
-        let current_hash:Int = sha256(sb.toString());
-        // require(self.verify_proof(current_hash, msg.proof, msg.proof_length), "Illegal mint");
+        let current_hash:String = self._sha128(sb.toString());
 
-        self.mint(msg.receiver, msg.amount, self.owner, 666); // (to, amount, response_destination) 
+        return self.verify_proof(current_hash, msg.proof, msg.proof_length);
     }
 
-    receive("Mint: 100") { // Public Minting, Just for test TODO remove
-        require(self.mintable, "Not mintable");
-        require(self.total_supply + 100 <= self.max_supply, "Max supply exceeded");
-        self.mint(sender(), 100, self.owner, 0); // 🔴 
-    }
-
-    receive("Owner: MintClose") {
+    receive(msg: Mint) {
         let ctx: Context = context();
-        require(ctx.sender == self.owner, "Not owner");
-        self.mintable = false;
+        let _msg: JettonMint = JettonMint{
+            origin: ctx.sender,
+            receiver: ctx.sender,
+            amount: msg.amount,
+            custom_payload: beginCell().storeUint(sha256(msg.txid), 256).endCell(),
+            forward_ton_amount: 0,
+            forward_payload: emptySlice(),
+            txid: msg.txid
+        };
+        require(self.total_supply + msg.amount <= self.max_supply, "");
+        require(self.mint_config.minted_today + msg.amount <= self.mint_config.max_mint_today, "Mining cap reached today");
+        require(self.mintable, "JettonMaster: Jetton is not mintable");
+        self._merkel_mint_validate(msg);
+        self._mint(ctx, _msg); 
+    }
+    
+    // public, just for test
+    receive("Mint:1") {
+        let ctx: Context = context();
+        let msg: JettonMint = JettonMint{
+            origin: ctx.sender,
+            receiver: ctx.sender,
+            amount: ton("1"),
+            custom_payload: emptyCell(),
+            forward_ton_amount: 0,
+            forward_payload: emptySlice(),
+            txid: null
+        };
+        self._mint_validate(ctx, msg);
+        self._mint(ctx, msg);
     }
 
     receive(merkle_root: MerkleRoot) {
-        require(sender() == self.claim_info.admin, "Only for Admin Use");
-        require(now() - self.claim_info.set_at > self.claim_info.set_interval, "Setting Time Not Yet Cooled Down");
-        self.claim_info.merkle_root = merkle_root.value;
-        self.claim_info.set_at = now();
-        self.claim_info.minted_today = 0;
+        require(sender() == self.mint_config.admin, "No permission to operate");
+        require(now() - self.mint_config.set_at > self.mint_config.set_interval, "Setting Time Not Yet Cooled Down");
+        self.mint_config.merkle_root = merkle_root.value;
+        self.mint_config.set_at = now();
+        self.mint_config.minted_today = 0;
     }
 
     receive(merkle_admin: MerkleAdmin) {
-        self.requireOwner();
-        self.claim_info.admin = merkle_admin.admin;
+        require(sender() == self.owner, "No permission to operate");
+        self.mint_config.admin = merkle_admin.admin;
     }
 
-    receive(settings: MintSetting) {
-        self.requireOwner();
-        self.claim_info.set_interval = settings.set_interval;
-        self.claim_info.max_mint_today = settings.max_mint_today;
-    }
 
     get fun max_supply() : Int {
         return self.max_supply;
     }
 
 
-    fun verify_proof(target_hash: Int, proof: Cell, proof_length: Int): Bool {
-        let current_hash: String = target_hash.toString();
-        let i: Int = 0;
-        let parser: Slice = proof.beginParse();
-        repeat (proof_length) {
-            if (i > 0 && !parser.refsEmpty()) {
-                parser = parser.loadRef().beginParse();
-            }
-            let _hash: Int = parser.loadUint(256);
-            let _position: Int = parser.loadUint(1);
+    fun _sha128(s: String) : String {
+        return (sha256(s) >> 128).toString();
+    }
 
+    fun _merkel_mint_validate(msg: Mint) {
+        let ctx: Context = context();
+        let sb: StringBuilder = beginString();
+        sb.append(msg.txid);
+        sb.append(msg.receiver_str);
+        sb.append(msg.amount.toString());
+        let tx_str :String = sb.toString();
+        require(self.verify_proof(self._sha128(tx_str), msg.proof, msg.proof_length) == true, "Merkel tree verification failed");
+    }
+
+    override inline fun calculate_jetton_wallet_init(owner_address: Address): StateInit {
+        return initOf TweetfiWallet(owner_address, myAddress());
+    }
+
+ 
+    fun verify_proof(target_hash: String, proof: Cell, proof_length: Int): Bool {
+        let current_hash: String = target_hash;
+        let frist_cell: Bool = true; 
+        let parser : Slice = proof.beginParse();
+        repeat (proof_length) {
+            if (!frist_cell) {
+                if !parser.refsEmpty() {
+                    parser = parser.loadRef().beginParse();
+                }
+            }
+            let _hash: Int = parser.loadUint(128);
+            let _position: Int = parser.loadUint(1);
             let sb: StringBuilder = beginString();
-            
+
+            // Efficiently build the string based on the position
             if (_position == 0) {
                 sb.append(_hash.toString());
                 sb.append(current_hash);
-                current_hash = sha256(sb.toString()).toString();
-            } else{
+            } else {
                 sb.append(current_hash);
                 sb.append(_hash.toString());
-                current_hash = sha256(sb.toString()).toString();
             }
-            i = i + 1;
+
+            current_hash = self._sha128(sb.toString());  // Update the hash after building the string
+            frist_cell = false;
         }
-        return current_hash == self.claim_info.merkle_root;
+
+        return current_hash == self.mint_config.merkle_root;
     }
-} 
+
+}
