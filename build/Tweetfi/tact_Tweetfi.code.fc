@@ -142,7 +142,7 @@
     var ($self'total_supply, $self'mintable, $self'owner, $self'jetton_content, $self'max_supply, ($self'mint_config'merkle_root, $self'mint_config'set_at, $self'mint_config'set_interval, $self'mint_config'admin, $self'mint_config'max_mint_today, $self'mint_config'minted_today)) = $self;
     var ($msg'receiver, $msg'amount, $msg'receiver_str, $msg'txid, $msg'proof_length, $msg'proof) = $msg;
     var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    var ($_msg'origin, $_msg'receiver, $_msg'amount, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload) = $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload($ctx'sender, $ctx'sender, $msg'amount, $global_emptyCell(), 0, $Cell$_fun_asSlice(end_cell(store_uint(store_uint(store_uint(begin_cell(), 0, 32), 2024, 16), string_hash($msg'txid), 256))));
+    var ($_msg'origin, $_msg'receiver, $_msg'amount, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload) = $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload($ctx'sender, $ctx'sender, $msg'amount, $global_emptyCell(), 0, $Cell$_fun_asSlice(end_cell(store_uint(store_uint(store_uint(begin_cell(), 0, 32), 9999, 16), string_hash($msg'txid), 256))));
     throw_unless(8610, (($self'total_supply + $msg'amount) <= $self'max_supply));
     throw_unless(62211, (($self'mint_config'minted_today + $msg'amount) <= $self'mint_config'max_mint_today));
     throw_unless(30061, $self'mintable);
@@ -240,7 +240,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmcjQRrNPhysDJQmX8S6CVc6FNDBYmY56DjLezCAfkYhq6";
+    return "ipfs://QmWxZf2JFm42rF4MhiLE3JSCcAn9MnwJL4QyVd48aX3gno";
 }
 
 _ lazy_deployment_completed() method_id {

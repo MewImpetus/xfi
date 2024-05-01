@@ -202,20 +202,16 @@ cell $JettonBurnNotification$_store_cell((int, int, slice, slice) v) inline {
 
 ;;
 ;; Type: Tip
-;; Header: 0xd96ed3f9
-;; TLB: tip#d96ed3f9 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = Tip
+;; Header: 0x85f7b2be
+;; TLB: tip#85f7b2be query_id:uint64 amount:coins destination:address = Tip
 ;;
 
-(slice, ((int, int, slice, slice, cell, int, slice))) $Tip$_load(slice sc_0) inline_ref {
-    throw_unless(129, sc_0~load_uint(32) == 3647919097);
+(slice, ((int, int, slice))) $Tip$_load(slice sc_0) inline {
+    throw_unless(129, sc_0~load_uint(32) == 2247602878);
     var v'query_id = sc_0~load_uint(64);
     var v'amount = sc_0~load_coins();
     var v'destination = sc_0~__tact_load_address();
-    var v'response_destination = sc_0~__tact_load_address();
-    var v'custom_payload = sc_0~load_int(1) ? sc_0~load_ref() : null();
-    var v'forward_ton_amount = sc_0~load_coins();
-    var v'forward_payload = sc_0;
-    return (sc_0, (v'query_id, v'amount, v'destination, v'response_destination, v'custom_payload, v'forward_ton_amount, v'forward_payload));
+    return (sc_0, (v'query_id, v'amount, v'destination));
 }
 
 ;;

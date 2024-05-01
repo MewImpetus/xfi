@@ -91,7 +91,7 @@ cell $JettonBurnNotification$_store_cell((int, int, slice, slice) v) inline;
 (slice, ((int, int))) $JettonBurnNotification$_load_bounced(slice sc_0) inline;
 
 ;; $Tip$_load
-(slice, ((int, int, slice, slice, cell, int, slice))) $Tip$_load(slice sc_0) inline_ref;
+(slice, ((int, int, slice))) $Tip$_load(slice sc_0) inline;
 
 ;; $TweetfiWallet$_store
 builder $TweetfiWallet$_store(builder build_0, (int, int, slice, slice, cell) v) inline;
@@ -120,6 +120,15 @@ builder $TweetfiWallet$init$_store(builder build_0, (slice, slice) v) inline;
 ;; $TweetfiWallet$_contract_store
 () $TweetfiWallet$_contract_store((int, int, slice, slice, cell) v) impure inline;
 
+;; $global_emptyCell
+cell $global_emptyCell() impure inline;
+
+;; $Cell$_fun_asSlice
+slice $Cell$_fun_asSlice(cell $self) impure inline;
+
+;; $global_emptySlice
+slice $global_emptySlice() impure inline;
+
 ;; $global_contractAddress
 slice $global_contractAddress((cell, cell) $s) impure inline;
 
@@ -131,6 +140,9 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline_r
 
 ;; $TweetfiWallet$_init_child
 (cell, cell) $TweetfiWallet$_init_child(cell sys', slice $owner, slice $jetton_master) inline_ref;
+
+;; $TweetfiWallet$_fun_testtip
+((int, int, slice, slice, cell), int) $TweetfiWallet$_fun_testtip((int, int, slice, slice, cell) $self) impure inline_ref;
 
 ;; $TweetfiWallet$_fun_get_illiquid_balance
 ((int, int, slice, slice, cell), slice) $TweetfiWallet$_fun_get_illiquid_balance((int, int, slice, slice, cell) $self) impure inline_ref;

@@ -5,7 +5,7 @@ import { NetworkProvider } from '@ton/blueprint';
 export async function run(provider: NetworkProvider, args: string[]) {
     const ui = provider.ui();
 
-    const address = Address.parse("EQBnVf8z0-mlyEwrsoLN-ytzAYUWWzjoZ5lPCjPYHnrA4eEG");
+    const address = Address.parse("EQDesOlWBVeE3FuJP2R74ATln3oESoxl-pT-4aFP_wpvLNmZ");
 
 
     const hub = provider.open(Tweetfi.fromAddress(address));

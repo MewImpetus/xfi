@@ -32,11 +32,7 @@ message MerkleAdmin {
 message Tip {
     query_id: Int as uint64;                
     amount: Int as coins;                   
-    destination: Address;                   
-    response_destination: Address;          
-    custom_payload: Cell?;                  
-    forward_ton_amount: Int as coins;       
-    forward_payload: Slice as remaining;    
+    destination: Address;                
 }
 
 
@@ -54,36 +50,41 @@ contract TweetfiWallet with JettonWallet {
     }
 
   
+    get fun testtip() : Int {
+        return self.balance;
+    }
 
     receive(msg: Tip) {
-
+    
         let ctx: Context = context();
-        self.illiquid_balance = self.illiquid_balance - msg.amount;
-        require(self.illiquid_balance >= 0, "JettonWallet: Not enough illiquid jettons to transfer");
-        // 90% to the destination
-        let burn_amount : Int = msg.amount / 10;
-        require(msg.amount - burn_amount > 0, "JettonWallet: Not enough jettons to burn");
+        let burn_amount: Int = msg.amount / 10;
+        require(burn_amount >= 0, "JettonWallet: Not enough amount to transfer");
         let _msg: JettonTransfer = JettonTransfer {
                 query_id: msg.query_id,
                 amount: msg.amount - burn_amount,
                 destination: msg.destination,
-                response_destination: msg.response_destination,
-                custom_payload: msg.custom_payload,
-                forward_ton_amount: msg.forward_ton_amount,
-                forward_payload: msg.forward_payload
+                response_destination: ctx.sender,
+                custom_payload: emptyCell(),
+                forward_ton_amount: 0,
+                forward_payload: emptySlice()
         };
+
+        self.illiquid_balance = self.illiquid_balance - msg.amount;
+        require(self.illiquid_balance >= 0, "JettonWallet: Not enough illiquid jettons to transfer");
+
         self._transfer_validate(ctx, _msg);
         self._transfer_estimate_remain_value(ctx, _msg);
-        // require(ctx.sender != msg.target, "Cannot tip oneself");
-        // 90% transfer
         self._transfer_jetton(ctx, _msg);
-        // 10% to burning
-        self._burn_tokens(ctx, JettonBurn {
-                    query_id: msg.query_id,        
-                    amount: burn_amount,           
-                    response_destination: msg.response_destination,
-                    custom_payload: msg.custom_payload
-        });
+
+        // burn
+        let burn_msg : JettonBurn = JettonBurn {
+            query_id: msg.query_id,
+            amount: burn_amount,
+            response_destination: ctx.sender,
+            custom_payload: emptyCell()
+        };
+        self._burn_validate(ctx, burn_msg);
+        self._burn_tokens(ctx, burn_msg);
     }
 
         
@@ -94,7 +95,7 @@ contract TweetfiWallet with JettonWallet {
         let cash: Int = msg.amount;
         let parser : Slice = msg.forward_payload;
         if (parser.bits() == 32 + 16 + 256){
-            let op: Int = parser.loadUint(16);
+            let op: Int = parser.loadUint(32);
             let check_code: Int = parser.loadUint(16);
             if (op==0 && check_code == 9999) {
                 let txid: Int = parser.loadUint(256);
@@ -160,7 +161,7 @@ contract Tweetfi with JettonMaster, Deployable {
             amount: msg.amount,
             custom_payload: emptyCell(),
             forward_ton_amount: 0,
-            forward_payload: beginCell().storeUint(0, 32).storeUint(2024, 16).storeUint(sha256(msg.txid), 256).endCell().asSlice()
+            forward_payload: beginCell().storeUint(0, 32).storeUint(9999, 16).storeUint(sha256(msg.txid), 256).endCell().asSlice()
         };
         require(self.total_supply + msg.amount <= self.max_supply, "");
         require(self.mint_config.minted_today + msg.amount <= self.mint_config.max_mint_today, "Mining cap reached today");
@@ -271,9 +272,4 @@ contract Tweetfi with JettonMaster, Deployable {
         // self._mint_validate(ctx, msg);
         self._mint(ctx, msg);
     }
-
-    //======================================================
-    // Just For Test TODO remove 
-    //======================================================
-
 }

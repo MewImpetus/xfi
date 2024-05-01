@@ -82,8 +82,8 @@ TLB: `merkle_admin#616d8aeb admin:address = MerkleAdmin`
 Signature: `MerkleAdmin{admin:address}`
 
 ## Tip
-TLB: `tip#d96ed3f9 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = Tip`
-Signature: `Tip{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
+TLB: `tip#85f7b2be query_id:uint64 amount:coins destination:address = Tip`
+Signature: `Tip{query_id:uint64,amount:coins,destination:address}`
 
 # Get Methods
 Total Get Methods: 5
@@ -135,10 +135,10 @@ Argument: owner_address
 30061: JettonMaster: Jetton is not mintable
 32067: Merkel tree verification failed
 37185: Not enough funds to transfer
-38685: JettonWallet: Not enough jettons to burn
 43365: JettonMaster: Sender is not a Jetton owner
 47048: JettonWallet: Only owner can burn tokens
 49352: JettonWallet: Not enough illiquid jettons to transfer
+49895: JettonWallet: Not enough amount to transfer
 54789: Setting Time Not Yet Cooled Down
 57166: No permission to operate
 60354: JettonWallet: Not enough balance to burn tokens

@@ -1,9 +1,10 @@
 import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
-import { Address, toNano, Cell, beginCell } from '@ton/core';
+import { Address, toNano, Cell, beginCell, Slice } from '@ton/core';
 import { Tweetfi } from '../wrappers/Tweetfi';
 import { TweetfiWallet } from '../wrappers/TweetfiWallet';
 import '@ton/test-utils';
 import { buildOnchainMetadata } from "../scripts/utils/jetton-helpers";
+import { sleep } from '@ton/blueprint';
 
 
 
@@ -53,7 +54,7 @@ describe('TOken', () => {
         const deployResult = await jettonMaster.send(
             owner.getSender(),
             {
-                value: toNano('0.5'),
+                value: toNano('20'),
             },
             {
                 $$type: 'Deploy',
@@ -146,5 +147,68 @@ describe('TOken', () => {
 
     });
     
+
+
+    it('Test: tip', async () => {
+
+        const mintResult = await jettonMaster.send(
+            alice.getSender(),
+            {
+                value: toNano('0.5'),
+            },
+            "Mint:1"
+        )
+
+        await jettonMaster.send(
+            owner.getSender(),
+            {
+                value: toNano('0.5'),
+            },
+            "Mint:1"
+        )
+
+        const aliceWalletAddress = await jettonMaster.getGetWalletAddress(alice.address);
+        const aliceJettonContract = blockchain.openContract(TweetfiWallet.fromAddress(aliceWalletAddress));
+        const aliceBalanceAfter = (await aliceJettonContract.getGetWalletData()).balance;
+
+        console.log(aliceBalanceAfter)
+
+
+        aliceJettonContract.send(
+            alice.getSender(),
+            {
+                value: toNano('10'),
+            },
+            {
+                $$type: "Tip",
+                query_id: 0n,                
+                amount: toNano(1000),                 
+                destination: owner.address,
+            }
+        )
+
+        const newbalance = (await aliceJettonContract.getGetWalletData()).balance;
+        console.log(newbalance);
+
+        const ownerWalletAddress = await jettonMaster.getGetWalletAddress(owner.address);
+        const ownerJettonContract = blockchain.openContract(TweetfiWallet.fromAddress(ownerWalletAddress));
+        
+        const ownerBalanceAfter = (await ownerJettonContract.getGetWalletData()).balance;
+        console.log("owner getGetWalletData balance:", ownerBalanceAfter);
+        let c = (await ownerJettonContract.getTesttip())
+        console.log("owner balance", c)
+
+
+        const aliceBalanceAfter2 = (await aliceJettonContract.getGetWalletData()).balance;
+
+        console.log("aliceBalanceAfter2:", aliceBalanceAfter2)
+
+        let a = (await aliceJettonContract.getGetIlliquidBalance())
+        console.log("alice IlliquidBalance:", a)
+
+        let b = (await aliceJettonContract.getTesttip())
+        console.log("alice balance", b)
+
+    });
 
 });
