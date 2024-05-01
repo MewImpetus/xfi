@@ -2,7 +2,18 @@ import hashlib
 
 
 def hash_data(data):
-    return str(int(hashlib.sha256(data.encode()).hexdigest(), 16))
+    # 创建 sha256 哈希对象
+    hasher = hashlib.sha256()
+    if isinstance(data, str):
+        data = data.encode('utf-8')
+    hasher.update(data)
+    digest = hasher.digest()
+    full_hash = int.from_bytes(digest, 'big')
+    truncated_hash = full_hash >> 128
+
+    return str(truncated_hash)
+
+
 
 
 class MerkleTree:
@@ -47,7 +58,7 @@ class MerkleTree:
 
 
 # Example Usage
-data_blocks = ['123UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs1000000000', 'block2', 'block3', 'block4']
+data_blocks = ['123UQAkZEqn5O4_yI3bCBzxpLEsO1Z10QSGDK5O4buL9nQrWNAs10000000000000', 'block2', 'block3', 'block4']
 merkle_tree = MerkleTree(data_blocks)
 target_index = 0
 proof = merkle_tree.get_proof(target_index)
@@ -56,4 +67,5 @@ verified = merkle_tree.verify_proof(proof, merkle_tree.leaves[target_index], mer
 print("root:", merkle_tree.tree[-1][0])
 print("Proof:", proof)
 print("Verified:", verified)
+print("Target hash:", merkle_tree.leaves[target_index])
 
