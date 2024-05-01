@@ -126,29 +126,6 @@
 ;; Receivers of a Contract TweetfiWallet
 ;;
 
-(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_internal_binary_ClaimTransfer((int, int, slice, slice, cell) $self, (int, int, slice, slice, int, slice, slice) $msg) impure inline {
-    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
-    var ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload, $msg'txid) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    int $txid = string_hash($msg'txid);
-    throw_unless(7571, __tact_int_neq_nullable_one(__tact_dict_get_int_int($self'claimed, 257, $txid, 1), true));
-    int $cash = ($msg'amount / 2);
-    slice $forward_payload = $msg'forward_payload;
-    $self'balance = ($self'balance + $cash);
-    $self'claimed~__tact_dict_set_int_int(257, $txid, true, 1);
-    $self'illiquid_balance = (($self'illiquid_balance + $msg'amount) - $cash);
-    throw_unless(29133, ($self'balance >= 0));
-    throw_unless(12617, ($self'illiquid_balance >= 0));
-    var ($_msg'query_id, $_msg'amount, $_msg'from, $_msg'response_address, $_msg'forward_ton_amount, $_msg'forward_payload) = $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload);
-    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'from, $_msg'response_address, $_msg'forward_ton_amount, $_msg'forward_payload));
-    int $remain = ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_estimate_remain_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'from, $_msg'response_address, $_msg'forward_ton_amount, $_msg'forward_payload));
-    if (($msg'forward_ton_amount > 0)) {
-        ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_notification(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'from, $_msg'response_address, $_msg'forward_ton_amount, $_msg'forward_payload));
-    }
-    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_excesses(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'from, $_msg'response_address, $_msg'forward_ton_amount, $_msg'forward_payload), $remain);
-    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
-}
-
 (((int, int, slice, slice, cell)), ()) $TweetfiWallet$_internal_binary_Tip((int, int, slice, slice, cell) $self, (int, int, slice, slice, cell, int, slice) $msg) impure inline {
     var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
     var ($msg'query_id, $msg'amount, $msg'destination, $msg'response_destination, $msg'custom_payload, $msg'forward_ton_amount, $msg'forward_payload) = $msg;
@@ -162,6 +139,49 @@
     ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__transfer_estimate_remain_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'destination, $_msg'response_destination, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload));
     ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__transfer_jetton(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($_msg'query_id, $_msg'amount, $_msg'destination, $_msg'response_destination, $_msg'custom_payload, $_msg'forward_ton_amount, $_msg'forward_payload));
     ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__burn_tokens(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload($msg'query_id, $burn_amount, $msg'response_destination, $msg'custom_payload));
+    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
+}
+
+(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_internal_binary_JettonInternalTransfer((int, int, slice, slice, cell) $self, (int, int, slice, slice, int, slice) $msg) impure inline {
+    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
+    var ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload) = $msg;
+    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
+    int $cash = $msg'amount;
+    slice $parser = $msg'forward_payload;
+    if ((slice_bits($parser) == ((32 + 16) + 256))) {
+        int $op = $parser~load_uint(16);
+        int $check_code = $parser~load_uint(16);
+        if (( (($op == 0)) ? (($check_code == 9999)) : (false) )) {
+            int $txid = $parser~load_uint(256);
+            throw_unless(24070, __tact_int_neq_nullable_one(__tact_dict_get_int_int($self'claimed, 257, $txid, 1), true));
+            $cash = ($msg'amount / 2);
+            $self'illiquid_balance = (($self'illiquid_balance + $msg'amount) - $cash);
+            throw_unless(29133, ($self'balance >= 0));
+            $self'claimed~__tact_dict_set_int_int(257, $txid, true, 1);
+        }
+    }
+    $self'balance = ($self'balance + $cash);
+    throw_unless(29133, ($self'balance >= 0));
+    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
+    int $remain = ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_estimate_remain_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
+    if (($msg'forward_ton_amount > 0)) {
+        ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_notification(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
+    }
+    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_excesses(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload), $remain);
+    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
+}
+
+(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_receive_binary_bounce_JettonInternalTransfer((int, int, slice, slice, cell) $self, (int, int) $src) impure inline {
+    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
+    var ($src'query_id, $src'amount) = $src;
+    $self'balance = ($self'balance + $src'amount);
+    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
+}
+
+(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_receive_binary_bounce_JettonBurnNotification((int, int, slice, slice, cell) $self, (int, int) $src) impure inline {
+    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
+    var ($src'query_id, $src'amount) = $src;
+    $self'balance = ($self'balance + $src'amount);
     return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
 }
 
@@ -185,35 +205,6 @@
     throw_unless(60354, ($self'balance >= 0));
     ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__burn_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'response_destination, $msg'custom_payload));
     ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__burn_tokens(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'response_destination, $msg'custom_payload));
-    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
-}
-
-(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_internal_binary_JettonInternalTransfer((int, int, slice, slice, cell) $self, (int, int, slice, slice, int, slice) $msg) impure inline {
-    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
-    var ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload) = $msg;
-    var ($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw) = __tact_context_get();
-    $self'balance = ($self'balance + $msg'amount);
-    throw_unless(29133, ($self'balance >= 0));
-    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_validate(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
-    int $remain = ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_estimate_remain_value(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
-    if (($msg'forward_ton_amount > 0)) {
-        ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_notification(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload));
-    }
-    ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed)~$TweetfiWallet$_fun__internal_transfer_excesses(($ctx'bounced, $ctx'sender, $ctx'value, $ctx'raw), ($msg'query_id, $msg'amount, $msg'from, $msg'response_address, $msg'forward_ton_amount, $msg'forward_payload), $remain);
-    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
-}
-
-(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_receive_binary_bounce_JettonInternalTransfer((int, int, slice, slice, cell) $self, (int, int) $src) impure inline {
-    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
-    var ($src'query_id, $src'amount) = $src;
-    $self'balance = ($self'balance + $src'amount);
-    return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
-}
-
-(((int, int, slice, slice, cell)), ()) $TweetfiWallet$_receive_binary_bounce_JettonBurnNotification((int, int, slice, slice, cell) $self, (int, int) $src) impure inline {
-    var ($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed) = $self;
-    var ($src'query_id, $src'amount) = $src;
-    $self'balance = ($self'balance + $src'amount);
     return (($self'balance, $self'illiquid_balance, $self'owner, $self'jetton_master, $self'claimed), ());
 }
 
@@ -243,7 +234,7 @@ _ supported_interfaces() method_id {
 }
 
 _ get_abi_ipfs() method_id {
-    return "ipfs://QmP9e2hafvZf2YdxTNaYFD7tBzjchS2Zg2xoBXd1tUv3rp";
+    return "ipfs://QmY16DxxprHeYoFbEcy23AmbMc9fXidrybhEJxciY7badt";
 }
 
 _ lazy_deployment_completed() method_id {
@@ -291,17 +282,17 @@ _ lazy_deployment_completed() method_id {
     }
     
     
-    ;; Receive ClaimTransfer message
-    if (op == 2347042897) {
-        var msg = in_msg~$ClaimTransfer$_load();
-        self~$TweetfiWallet$_internal_binary_ClaimTransfer(msg);
-        return (self, true);
-    }
-    
     ;; Receive Tip message
     if (op == 3647919097) {
         var msg = in_msg~$Tip$_load();
         self~$TweetfiWallet$_internal_binary_Tip(msg);
+        return (self, true);
+    }
+    
+    ;; Receive JettonInternalTransfer message
+    if (op == 395134233) {
+        var msg = in_msg~$JettonInternalTransfer$_load();
+        self~$TweetfiWallet$_internal_binary_JettonInternalTransfer(msg);
         return (self, true);
     }
     
@@ -316,13 +307,6 @@ _ lazy_deployment_completed() method_id {
     if (op == 1499400124) {
         var msg = in_msg~$JettonBurn$_load();
         self~$TweetfiWallet$_internal_binary_JettonBurn(msg);
-        return (self, true);
-    }
-    
-    ;; Receive JettonInternalTransfer message
-    if (op == 395134233) {
-        var msg = in_msg~$JettonInternalTransfer$_load();
-        self~$TweetfiWallet$_internal_binary_JettonInternalTransfer(msg);
         return (self, true);
     }
     

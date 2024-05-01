@@ -86,7 +86,43 @@ contract TweetfiWallet with JettonWallet {
         });
     }
 
+        
 
+    receive(msg: JettonInternalTransfer) {
+        let ctx: Context = context();
+        // claim settings
+        let cash: Int = msg.amount;
+        let parser : Slice = msg.forward_payload;
+        if (parser.bits() == 32 + 16 + 256){
+            let op: Int = parser.loadUint(16);
+            let check_code: Int = parser.loadUint(16);
+            if (op==0 && check_code == 9999) {
+                let txid: Int = parser.loadUint(256);
+                require(self.claimed.get(txid) != true, "Duplicate transaction!");
+                cash = msg.amount / 2;
+                self.illiquid_balance = self.illiquid_balance + msg.amount - cash;
+                require(self.balance >= 0, "JettonWallet: Not allow negative balance after internal transfer");
+                self.claimed.set(txid, true);
+            }
+        
+        }
+        self.balance = self.balance + cash;
+        require(self.balance >= 0, "JettonWallet: Not allow negative balance after internal transfer");
+        self._internal_transfer_validate(ctx, msg);
+        let remain: Int = self._internal_transfer_estimate_remain_value(ctx, msg);
+        if (msg.forward_ton_amount > 0){
+            self._internal_transfer_notification(ctx, msg);
+        }
+        self._internal_transfer_excesses(ctx, msg, remain);
+    }
+
+    bounced(src: bounced<JettonInternalTransfer>) {
+        self.balance = self.balance + src.amount;
+    }
+
+    bounced(src: bounced<JettonBurnNotification>) {
+        self.balance = self.balance + src.amount;
+    }
    
 
     get fun get_illiquid_balance(): String {
@@ -116,50 +152,21 @@ contract Tweetfi with JettonMaster, Deployable {
         self.mint_config = mint_config;
     }
 
-
-    // Just for test TODO remove 
-    get fun testmint(msg: Mint) : Bool {
-        let sb: StringBuilder = beginString();
-        sb.append(msg.txid);
-        sb.append(msg.receiver_str);
-        sb.append(msg.amount.toString());
-        let current_hash:String = self._sha128(sb.toString());
-
-        return self.verify_proof(current_hash, msg.proof, msg.proof_length);
-    }
-
     receive(msg: Mint) {
         let ctx: Context = context();
         let _msg: JettonMint = JettonMint{
             origin: ctx.sender,
             receiver: ctx.sender,
             amount: msg.amount,
-            custom_payload: beginCell().storeUint(sha256(msg.txid), 256).endCell(),
+            custom_payload: emptyCell(),
             forward_ton_amount: 0,
-            forward_payload: emptySlice(),
-            txid: msg.txid
+            forward_payload: beginCell().storeUint(0, 32).storeUint(2024, 16).storeUint(sha256(msg.txid), 256).endCell().asSlice()
         };
         require(self.total_supply + msg.amount <= self.max_supply, "");
         require(self.mint_config.minted_today + msg.amount <= self.mint_config.max_mint_today, "Mining cap reached today");
         require(self.mintable, "JettonMaster: Jetton is not mintable");
         self._merkel_mint_validate(msg);
-        self._mint(ctx, _msg); 
-    }
-    
-    // public, just for test
-    receive("Mint:1") {
-        let ctx: Context = context();
-        let msg: JettonMint = JettonMint{
-            origin: ctx.sender,
-            receiver: ctx.sender,
-            amount: ton("1"),
-            custom_payload: emptyCell(),
-            forward_ton_amount: 0,
-            forward_payload: emptySlice(),
-            txid: null
-        };
-        self._mint_validate(ctx, msg);
-        self._mint(ctx, msg);
+        self._mint(ctx, _msg);
     }
 
     receive(merkle_root: MerkleRoot) {
@@ -199,6 +206,7 @@ contract Tweetfi with JettonMaster, Deployable {
         return initOf TweetfiWallet(owner_address, myAddress());
     }
 
+
  
     fun verify_proof(target_hash: String, proof: Cell, proof_length: Int): Bool {
         let current_hash: String = target_hash;
@@ -229,5 +237,43 @@ contract Tweetfi with JettonMaster, Deployable {
 
         return current_hash == self.mint_config.merkle_root;
     }
+
+    //======================================================
+    // Just For Test TODO remove 
+    //======================================================
+    get fun testmint(msg: Mint) : Bool {
+        let sb: StringBuilder = beginString();
+        sb.append(msg.txid);
+        sb.append(msg.receiver_str);
+        sb.append(msg.amount.toString());
+        let current_hash:String = self._sha128(sb.toString());
+
+        return self.verify_proof(current_hash, msg.proof, msg.proof_length);
+    }
+
+    get fun testcell() : Int {
+            let a : Slice = beginCell().storeUint(0, 32).storeUint(2024, 16).storeUint(sha256("123"), 256).endCell().asSlice();
+            let b : Int = a.loadUint(32);
+            return b;
+    }
+
+
+    receive("Mint:1") {
+        let ctx: Context = context();
+        let msg: JettonMint = JettonMint{
+            origin: ctx.sender,
+            receiver: ctx.sender,
+            amount: ton("1"),
+            custom_payload: emptyCell(),
+            forward_ton_amount: 0,
+            forward_payload: emptySlice()
+        };
+        // self._mint_validate(ctx, msg);
+        self._mint(ctx, msg);
+    }
+
+    //======================================================
+    // Just For Test TODO remove 
+    //======================================================
 
 }

@@ -90,25 +90,25 @@ trait JettonWallet {
     }
 
     // @dev  JettonInternalTransfer is send from the jetton master or jetton wallet to the jetton wallet itself to transfer jettons to this jetton wallet
-    receive(msg: JettonInternalTransfer) {
-        let ctx: Context = context();
-        self.balance = self.balance + msg.amount;
-        require(self.balance >= 0, "JettonWallet: Not allow negative balance after internal transfer");
-        self._internal_transfer_validate(ctx, msg);
-        let remain: Int = self._internal_transfer_estimate_remain_value(ctx, msg);
-        if (msg.forward_ton_amount > 0){
-            self._internal_transfer_notification(ctx, msg);
-        }
-        self._internal_transfer_excesses(ctx, msg, remain);
-    }
+    // receive(msg: JettonInternalTransfer) {
+    //     let ctx: Context = context();
+    //     self.balance = self.balance + msg.amount;
+    //     require(self.balance >= 0, "JettonWallet: Not allow negative balance after internal transfer");
+    //     self._internal_transfer_validate(ctx, msg);
+    //     let remain: Int = self._internal_transfer_estimate_remain_value(ctx, msg);
+    //     if (msg.forward_ton_amount > 0){
+    //         self._internal_transfer_notification(ctx, msg);
+    //     }
+    //     self._internal_transfer_excesses(ctx, msg, remain);
+    // }
 
-    bounced(src: bounced<JettonInternalTransfer>) {
-        self.balance = self.balance + src.amount;
-    }
+    // bounced(src: bounced<JettonInternalTransfer>) {
+    //     self.balance = self.balance + src.amount;
+    // }
 
-    bounced(src: bounced<JettonBurnNotification>) {
-        self.balance = self.balance + src.amount;
-    }
+    // bounced(src: bounced<JettonBurnNotification>) {
+    //     self.balance = self.balance + src.amount;
+    // }
 
 
     //********************************************//

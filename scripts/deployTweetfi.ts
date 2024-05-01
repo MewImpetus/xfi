@@ -11,7 +11,7 @@ export async function run(provider: NetworkProvider) {
     const jettonParams = {
         name: "Tweetfi",
         description: "TweetFi (TEF) is an innovative social media mining platform that aims to provide social media users with a share to earn channel by combining AI technology and blockchain token economics.",
-        symbol: "TEF0.5.11",
+        symbol: "TEF0.5.13",
         image: "https://raw.githubusercontent.com/MewImpetus/xfi/main/logo.png",
     };
 

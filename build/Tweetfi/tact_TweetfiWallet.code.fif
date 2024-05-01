@@ -29,7 +29,6 @@ PROGRAM{
   DECLPROC $JettonBurnNotification$_store_cell
   DECLPROC $JettonBurnNotification$_load_bounced
   DECLPROC $Tip$_load
-  DECLPROC $ClaimTransfer$_load
   DECLPROC $TweetfiWallet$_store
   DECLPROC $TweetfiWallet$_load
   DECLPROC $StateInit$_get_code
@@ -63,16 +62,14 @@ PROGRAM{
   DECLPROC $TweetfiWallet$_fun__transfer_jetton
   DECLPROC $WalletData$_constructor_balance_owner_jetton_jetton_wallet_code
   DECLPROC $TweetfiWallet$_fun_get_wallet_data
-  DECLPROC $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload
   DECLPROC $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
   DECLPROC $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload
-  DECLPROC $TweetfiWallet$_internal_binary_ClaimTransfer
   DECLPROC $TweetfiWallet$_internal_binary_Tip
-  DECLPROC $TweetfiWallet$_internal_binary_JettonTransfer
-  DECLPROC $TweetfiWallet$_internal_binary_JettonBurn
   DECLPROC $TweetfiWallet$_internal_binary_JettonInternalTransfer
   DECLPROC $TweetfiWallet$_receive_binary_bounce_JettonInternalTransfer
   DECLPROC $TweetfiWallet$_receive_binary_bounce_JettonBurnNotification
+  DECLPROC $TweetfiWallet$_internal_binary_JettonTransfer
+  DECLPROC $TweetfiWallet$_internal_binary_JettonBurn
   102683 DECLMETHOD %get_illiquid_balance
   97026 DECLMETHOD %get_wallet_data
   113617 DECLMETHOD supported_interfaces
@@ -471,29 +468,6 @@ PROGRAM{
     }>
     LDGRAMS
     s6 s6 XCPU
-    s1 s6 XCHG
-    s1 s5 XCHG
-    s1 s4 XCHG
-    s3 s3 s0 XCHG3
-  }>
-  $ClaimTransfer$_load PROCREF:<{
-    32 LDU
-    SWAP
-    2347042897 PUSHINT
-    EQUAL
-    129 THROWIFNOT
-    64 LDU
-    LDGRAMS
-    __tact_load_address INLINECALLDICT
-    SWAP
-    __tact_load_address INLINECALLDICT
-    SWAP
-    LDGRAMS
-    DUP
-    LDREF
-    SWAP
-    CTOS
-    s1 s7 XCHG
     s1 s6 XCHG
     s1 s5 XCHG
     s1 s4 XCHG
@@ -975,90 +949,9 @@ PROGRAM{
     s4 s6 XCHG
     s4 s5 XCHG
   }>
-  $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload PROCINLINE:<{
-  }>
   $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload PROCINLINE:<{
   }>
   $JettonBurn$_constructor_query_id_amount_response_destination_custom_payload PROCINLINE:<{
-  }>
-  $TweetfiWallet$_internal_binary_ClaimTransfer PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
-    s0 s4 XCHG
-    SHA256U
-    7571 PUSHINT
-    s12 PUSH
-    257 PUSHINT
-    s3 PUSH
-    1 PUSHINT
-    __tact_dict_get_int_int INLINECALLDICT
-    TRUE
-    __tact_int_neq_nullable_one INLINECALLDICT
-    THROWANYIFNOT
-    s9 PUSH
-    1 RSHIFT#
-    s0 16 s() XCHG
-    16 s() PUSH
-    ADD
-    s1 s12 XCHG
-    257 PUSHINT
-    s0 s13 XCHG2
-    TRUE
-    1 PUSHINT
-    __tact_dict_set_int_int INLINECALLDICT
-    s14 s9 XCPU
-    ADD
-    s0 s15 XCHG2
-    SUB
-    29133 PUSHINT
-    s11 PUSH
-    -1 GTINT
-    THROWANYIFNOT
-    12617 PUSHINT
-    OVER
-    -1 GTINT
-    THROWANYIFNOT
-    s4 s9 XCHG
-    s3 s8 XCHG
-    s7 s6 s0 XCHG3
-    s5 s9 PUXC
-    $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload INLINECALLDICT
-    s4 s11 XCHG
-    s3 s10 XCHG
-    s13 s12 s14 XCHG3
-    s8 s7 s15 PUSH3
-    s12 s8 s14 PUSH3
-    16 s() PUSH
-    20 s() PUSH
-    20 s() PUSH
-    23 s() PUSH
-    $TweetfiWallet$_fun__internal_transfer_validate INLINECALLDICT
-    s8 s7 s15 PUSH3
-    s12 s8 s14 PUSH3
-    16 s() PUSH
-    20 s() PUSH
-    20 s() PUSH
-    23 s() PUSH
-    $TweetfiWallet$_fun__internal_transfer_estimate_remain_value INLINECALLDICT
-    s0 s7 XCHG
-    0 GTINT
-    IF:<{
-      s8 s7 s15 PUSH3
-      s12 s8 s14 PUSH3
-      16 s() PUSH
-      20 s() PUSH
-      20 s() PUSH
-      23 s() PUSH
-      $TweetfiWallet$_fun__internal_transfer_notification INLINECALLDICT
-    }>
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s13 s12 s11 XCHG3
-    s8 s10 XCHG
-    s7 s9 XCHG
-    s4 s8 XCHG
-    s0 s5 XCHG
-    s1 s3 s6 XCHG3
-    $TweetfiWallet$_fun__internal_transfer_excesses INLINECALLDICT
   }>
   $TweetfiWallet$_internal_binary_Tip PROCINLINE:<{
     __tact_context_get INLINECALLDICT
@@ -1132,65 +1025,62 @@ PROGRAM{
     s4 s7 XCHG
     $TweetfiWallet$_fun__burn_tokens INLINECALLDICT
   }>
-  $TweetfiWallet$_internal_binary_JettonTransfer PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
-    s15 s9 XCPU
-    SUB
-    13105 PUSHINT
-    OVER
-    -1 GTINT
-    THROWANYIFNOT
-    s0 s4 XCHG
-    s3 s14 XCHG
-    s13 s12 s11 XCHG3
-    s14 s13 s12 PUSH3
-    18 s() PUSH
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    21 s() PUSH
-    $TweetfiWallet$_fun__transfer_validate INLINECALLDICT
-    s14 s13 s12 PUSH3
-    18 s() PUSH
-    s14 s13 s12 PUSH3
-    s14 s13 s12 PUSH3
-    21 s() PUSH
-    $TweetfiWallet$_fun__transfer_estimate_remain_value INLINECALLDICT
-    s4 s15 XCHG
-    s3 s14 XCHG
-    s13 s12 s11 XCHG3
-    s3 s10 XCHG
-    s9 s8 s0 XCHG3
-    s4 s7 XCHG
-    s3 s6 XCHG
-    s5 s4 s0 XCHG3
-    s3 s3 s0 XCHG3
-    $TweetfiWallet$_fun__transfer_jetton INLINECALLDICT
-  }>
-  $TweetfiWallet$_internal_binary_JettonBurn PROCINLINE:<{
-    __tact_context_get INLINECALLDICT
-    s12 s6 XCPU
-    SUB
-    60354 PUSHINT
-    OVER
-    -1 GTINT
-    THROWANYIFNOT
-    s0 s4 XCHG
-    s3 s11 XCHG
-    s10 s9 s8 XCHG3
-    s11 s10 s9 PUSH3
-    s15 s10 s9 PUSH3
-    s11 s14 PUSH2
-    $TweetfiWallet$_fun__burn_validate INLINECALLDICT
-    s4 s12 XCHG
-    s3 s11 XCHG
-    s10 s9 s8 XCHG3
-    s3 s7 XCHG
-    s6 s5 s0 XCHG3
-    $TweetfiWallet$_fun__burn_tokens INLINECALLDICT
-  }>
   $TweetfiWallet$_internal_binary_JettonInternalTransfer PROCINLINE:<{
     __tact_context_get INLINECALLDICT
-    s14 s8 XCPU
+    s8 s4 s4 PUSH3
+    SBITS
+    304 PUSHINT
+    EQUAL
+    IF:<{
+      16 LDU
+      16 LDU
+      s0 s2 XCHG
+      0 EQINT
+      IF:<{
+        9999 PUSHINT
+        EQUAL
+      }>ELSE<{
+        DROP
+        FALSE
+      }>
+      IF:<{
+        NIP
+        256 LDU
+        DROP
+        24070 PUSHINT
+        s12 PUSH
+        257 PUSHINT
+        s3 PUSH
+        1 PUSHINT
+        __tact_dict_get_int_int INLINECALLDICT
+        TRUE
+        __tact_int_neq_nullable_one INLINECALLDICT
+        THROWANYIFNOT
+        s9 PUSH
+        1 RSHIFT#
+        s15 s10 XCPU
+        ADD
+        s15 PUSH
+        SUB
+        29133 PUSHINT
+        17 s() PUSH
+        -1 GTINT
+        THROWANYIFNOT
+        s1 s12 XCHG
+        257 PUSHINT
+        s0 s13 XCHG2
+        TRUE
+        1 PUSHINT
+        __tact_dict_set_int_int INLINECALLDICT
+        s0 s11 XCHG
+        s0 s14 XCHG
+      }>ELSE<{
+        DROP
+      }>
+    }>ELSE<{
+      DROP
+    }>
+    s1 s15 XCHG
     ADD
     29133 PUSHINT
     OVER
@@ -1248,6 +1138,62 @@ PROGRAM{
     ADD
     s0 s4 XCHG
   }>
+  $TweetfiWallet$_internal_binary_JettonTransfer PROCINLINE:<{
+    __tact_context_get INLINECALLDICT
+    s15 s9 XCPU
+    SUB
+    13105 PUSHINT
+    OVER
+    -1 GTINT
+    THROWANYIFNOT
+    s0 s4 XCHG
+    s3 s14 XCHG
+    s13 s12 s11 XCHG3
+    s14 s13 s12 PUSH3
+    18 s() PUSH
+    s14 s13 s12 PUSH3
+    s14 s13 s12 PUSH3
+    21 s() PUSH
+    $TweetfiWallet$_fun__transfer_validate INLINECALLDICT
+    s14 s13 s12 PUSH3
+    18 s() PUSH
+    s14 s13 s12 PUSH3
+    s14 s13 s12 PUSH3
+    21 s() PUSH
+    $TweetfiWallet$_fun__transfer_estimate_remain_value INLINECALLDICT
+    s4 s15 XCHG
+    s3 s14 XCHG
+    s13 s12 s11 XCHG3
+    s3 s10 XCHG
+    s9 s8 s0 XCHG3
+    s4 s7 XCHG
+    s3 s6 XCHG
+    s5 s4 s0 XCHG3
+    s3 s3 s0 XCHG3
+    $TweetfiWallet$_fun__transfer_jetton INLINECALLDICT
+  }>
+  $TweetfiWallet$_internal_binary_JettonBurn PROCINLINE:<{
+    __tact_context_get INLINECALLDICT
+    s12 s6 XCPU
+    SUB
+    60354 PUSHINT
+    OVER
+    -1 GTINT
+    THROWANYIFNOT
+    s0 s4 XCHG
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s11 s10 s9 PUSH3
+    s15 s10 s9 PUSH3
+    s11 s14 PUSH2
+    $TweetfiWallet$_fun__burn_validate INLINECALLDICT
+    s4 s12 XCHG
+    s3 s11 XCHG
+    s10 s9 s8 XCHG3
+    s3 s7 XCHG
+    s6 s5 s0 XCHG3
+    $TweetfiWallet$_fun__burn_tokens INLINECALLDICT
+  }>
   %get_illiquid_balance PROC:<{
     $TweetfiWallet$_contract_load INLINECALLDICT
     $TweetfiWallet$_fun_get_illiquid_balance INLINECALLDICT
@@ -1266,7 +1212,7 @@ PROGRAM{
     209474421377847335869795010607481022628 PUSHINT
   }>
   get_abi_ipfs PROC:<{
-    x{697066733a2f2f516d50396532686166765a6632596478544e615946443774427a6a636853325a6732786f42586431745576337270} PUSHSLICE
+    x{697066733a2f2f516d59313644787870724865596f46624563793233416d624d63396658696472796268454a786369593762616474} PUSHSLICE
   }>
   lazy_deployment_completed PROC:<{
     c4 PUSH
@@ -1319,16 +1265,6 @@ PROGRAM{
       32 PLDU
     }>
     DUP
-    2347042897 PUSHINT
-    EQUAL
-    IFJMP:<{
-      DROP
-      $ClaimTransfer$_load INLINECALLDICT
-      1 7 BLKDROP2
-      $TweetfiWallet$_internal_binary_ClaimTransfer INLINECALLDICT
-      TRUE
-    }>
-    DUP
     3647919097 PUSHINT
     EQUAL
     IFJMP:<{
@@ -1336,6 +1272,16 @@ PROGRAM{
       $Tip$_load INLINECALLDICT
       1 7 BLKDROP2
       $TweetfiWallet$_internal_binary_Tip INLINECALLDICT
+      TRUE
+    }>
+    DUP
+    395134233 PUSHINT
+    EQUAL
+    IFJMP:<{
+      DROP
+      $JettonInternalTransfer$_load INLINECALLDICT
+      1 6 BLKDROP2
+      $TweetfiWallet$_internal_binary_JettonInternalTransfer INLINECALLDICT
       TRUE
     }>
     DUP
@@ -1348,22 +1294,12 @@ PROGRAM{
       $TweetfiWallet$_internal_binary_JettonTransfer INLINECALLDICT
       TRUE
     }>
-    DUP
     1499400124 PUSHINT
     EQUAL
     IFJMP:<{
-      DROP
       $JettonBurn$_load INLINECALLDICT
       1 4 BLKDROP2
       $TweetfiWallet$_internal_binary_JettonBurn INLINECALLDICT
-      TRUE
-    }>
-    395134233 PUSHINT
-    EQUAL
-    IFJMP:<{
-      $JettonInternalTransfer$_load INLINECALLDICT
-      1 6 BLKDROP2
-      $TweetfiWallet$_internal_binary_JettonInternalTransfer INLINECALLDICT
       TRUE
     }>
     DROP

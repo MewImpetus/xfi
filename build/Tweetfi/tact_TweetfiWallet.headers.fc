@@ -93,9 +93,6 @@ cell $JettonBurnNotification$_store_cell((int, int, slice, slice) v) inline;
 ;; $Tip$_load
 (slice, ((int, int, slice, slice, cell, int, slice))) $Tip$_load(slice sc_0) inline_ref;
 
-;; $ClaimTransfer$_load
-(slice, ((int, int, slice, slice, int, slice, slice))) $ClaimTransfer$_load(slice sc_0) inline_ref;
-
 ;; $TweetfiWallet$_store
 builder $TweetfiWallet$_store(builder build_0, (int, int, slice, slice, cell) v) inline;
 
@@ -194,9 +191,6 @@ int $Context$_fun_readForwardFee((int, slice, int, slice) $self) impure inline_r
 
 ;; $TweetfiWallet$_fun_get_wallet_data
 ((int, int, slice, slice, cell), (int, slice, slice, cell)) $TweetfiWallet$_fun_get_wallet_data((int, int, slice, slice, cell) $self) impure inline_ref;
-
-;; $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload
-((int, int, slice, slice, int, slice)) $JettonInternalTransfer$_constructor_query_id_amount_from_response_address_forward_ton_amount_forward_payload(int query_id, int amount, slice from, slice response_address, int forward_ton_amount, slice forward_payload) inline;
 
 ;; $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload
 ((int, int, slice, slice, cell, int, slice)) $JettonTransfer$_constructor_query_id_amount_destination_response_destination_custom_payload_forward_ton_amount_forward_payload(int query_id, int amount, slice destination, slice response_destination, cell custom_payload, int forward_ton_amount, slice forward_payload) inline;

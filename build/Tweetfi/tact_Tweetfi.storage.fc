@@ -80,12 +80,12 @@ cell $DeployOk$_store_cell((int) v) inline {
 
 ;;
 ;; Type: JettonMint
-;; Header: 0x4401b784
-;; TLB: jetton_mint#4401b784 origin:address receiver:address amount:int257 custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> txid:Maybe ^string = JettonMint
+;; Header: 0x89b71d09
+;; TLB: jetton_mint#89b71d09 origin:address receiver:address amount:int257 custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonMint
 ;;
 
-((slice, slice, int, cell, int, slice, slice)) $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload_txid(slice origin, slice receiver, int amount, cell custom_payload, int forward_ton_amount, slice forward_payload, slice txid) inline {
-    return (origin, receiver, amount, custom_payload, forward_ton_amount, forward_payload, txid);
+((slice, slice, int, cell, int, slice)) $JettonMint$_constructor_origin_receiver_amount_custom_payload_forward_ton_amount_forward_payload(slice origin, slice receiver, int amount, cell custom_payload, int forward_ton_amount, slice forward_payload) inline {
+    return (origin, receiver, amount, custom_payload, forward_ton_amount, forward_payload);
 }
 
 ;;
@@ -201,33 +201,6 @@ builder $MintConfig$_store(builder build_0, (slice, int, int, slice, int, int) v
     throw_unless(129, sc_0~load_uint(32) == 1634568939);
     var v'admin = sc_0~__tact_load_address();
     return (sc_0, (v'admin));
-}
-
-;;
-;; Type: ClaimTransfer
-;; Header: 0x8be50851
-;; TLB: claim_transfer#8be50851 query_id:uint64 amount:coins from:address response_address:address forward_ton_amount:coins forward_payload:remainder<slice> txid:^string = ClaimTransfer
-;;
-
-builder $ClaimTransfer$_store(builder build_0, (int, int, slice, slice, int, slice, slice) v) inline_ref {
-    var (v'query_id, v'amount, v'from, v'response_address, v'forward_ton_amount, v'forward_payload, v'txid) = v;
-    build_0 = store_uint(build_0, 2347042897, 32);
-    build_0 = build_0.store_uint(v'query_id, 64);
-    build_0 = build_0.store_coins(v'amount);
-    build_0 = __tact_store_address(build_0, v'from);
-    build_0 = __tact_store_address(build_0, v'response_address);
-    build_0 = build_0.store_coins(v'forward_ton_amount);
-    build_0 = build_0.store_slice(v'forward_payload);
-    build_0 = build_0.store_ref(begin_cell().store_slice(v'txid).end_cell());
-    return build_0;
-}
-
-cell $ClaimTransfer$_store_cell((int, int, slice, slice, int, slice, slice) v) inline {
-    return $ClaimTransfer$_store(begin_cell(), v).end_cell();
-}
-
-((int, int, slice, slice, int, slice, slice)) $ClaimTransfer$_constructor_query_id_amount_response_address_from_forward_ton_amount_forward_payload_txid(int query_id, int amount, slice response_address, slice from, int forward_ton_amount, slice forward_payload, slice txid) inline {
-    return (query_id, amount, from, response_address, forward_ton_amount, forward_payload, txid);
 }
 
 ;;

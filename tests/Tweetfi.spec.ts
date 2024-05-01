@@ -134,6 +134,17 @@ describe('TOken', () => {
 
     });
 
+
+
+    it('Test: cell', async () => {
+
+
+      
+        let jd = await jettonMaster.getTestcell()
+
+        console.log(jd)
+
+    });
     
 
 });

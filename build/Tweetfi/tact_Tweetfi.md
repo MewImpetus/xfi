@@ -1,9 +1,9 @@
 # TACT Compilation Report
 Contract: Tweetfi
-BOC Size: 3369 bytes
+BOC Size: 3020 bytes
 
 # Types
-Total Types: 21
+Total Types: 20
 
 ## StateInit
 TLB: `_ code:^cell data:^cell = StateInit`
@@ -34,8 +34,8 @@ TLB: `_ total_supply:coins mintable:bool admin_address:address jetton_content:^c
 Signature: `JettonData{total_supply:coins,mintable:bool,admin_address:address,jetton_content:^cell,jetton_wallet_code:^cell}`
 
 ## JettonMint
-TLB: `jetton_mint#4401b784 origin:address receiver:address amount:int257 custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> txid:Maybe ^string = JettonMint`
-Signature: `JettonMint{origin:address,receiver:address,amount:int257,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>,txid:Maybe ^string}`
+TLB: `jetton_mint#89b71d09 origin:address receiver:address amount:int257 custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonMint`
+Signature: `JettonMint{origin:address,receiver:address,amount:int257,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
 
 ## JettonTransfer
 TLB: `jetton_transfer#0f8a7ea5 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = JettonTransfer`
@@ -85,17 +85,15 @@ Signature: `MerkleAdmin{admin:address}`
 TLB: `tip#d96ed3f9 query_id:uint64 amount:coins destination:address response_destination:address custom_payload:Maybe ^cell forward_ton_amount:coins forward_payload:remainder<slice> = Tip`
 Signature: `Tip{query_id:uint64,amount:coins,destination:address,response_destination:address,custom_payload:Maybe ^cell,forward_ton_amount:coins,forward_payload:remainder<slice>}`
 
-## ClaimTransfer
-TLB: `claim_transfer#8be50851 query_id:uint64 amount:coins from:address response_address:address forward_ton_amount:coins forward_payload:remainder<slice> txid:^string = ClaimTransfer`
-Signature: `ClaimTransfer{query_id:uint64,amount:coins,from:address,response_address:address,forward_ton_amount:coins,forward_payload:remainder<slice>,txid:^string}`
-
 # Get Methods
-Total Get Methods: 4
+Total Get Methods: 5
+
+## max_supply
 
 ## testmint
 Argument: msg
 
-## max_supply
+## testcell
 
 ## get_jetton_data
 
@@ -128,11 +126,10 @@ Argument: owner_address
 136: Invalid address
 137: Masterchain support is not enabled for this contract
 2296: JettonWallet: Only Jetton master or Jetton wallet can call this function
-7571: Duplicated transaction
 8610:
 9739: Sender is not a Jetton wallet
-12617: JettonWallet: Not allow negative illiquid balance after internal transfer
 13105: JettonWallet: Not enough jettons to transfer
+24070: Duplicate transaction!
 27831: Only owner can call this function
 29133: JettonWallet: Not allow negative balance after internal transfer
 30061: JettonMaster: Jetton is not mintable

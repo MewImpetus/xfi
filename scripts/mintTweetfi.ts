@@ -5,7 +5,7 @@ import { NetworkProvider } from '@ton/blueprint';
 export async function run(provider: NetworkProvider, args: string[]) {
     const ui = provider.ui();
 
-    const address = Address.parse("EQBTmYcJQVHGEQ5BhV_SjnZL4rGnebA11dQtAJQQhnc4s5mM");
+    const address = Address.parse("EQBnVf8z0-mlyEwrsoLN-ytzAYUWWzjoZ5lPCjPYHnrA4eEG");
 
 
     const hub = provider.open(Tweetfi.fromAddress(address));
@@ -47,7 +47,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     // await hub.send(
     //     provider.sender(),
     //     {
-    //         value: toNano('1'),
+    //         value: toNano('0.5'),
     //     },
     //     {
     //         $$type: "Mint",

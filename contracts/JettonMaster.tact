@@ -23,7 +23,6 @@ message JettonMint {
     custom_payload: Cell?;  // optional custom data
     forward_ton_amount: Int as coins;
     forward_payload: Slice as remaining;
-    txid: String?;
 }
 
 trait JettonMaster {
